@@ -11,9 +11,88 @@ A modern, full-featured desktop accounting system built with WPF (.NET 8) for Ni
 [![License](https://img.shields.io/badge/License-Proprietary-red.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-Windows%2010%2F11-blue.svg)](https://github.com/segunmicheal27/FastAccountingSoftware)
 [![.NET](https://img.shields.io/badge/.NET-8.0-purple.svg)](https://dotnet.microsoft.com/)
-[![Status](https://img.shields.io/badge/Status-Active-brightgreen.svg)](https://github.com/segunmicheal27/FastAccountingSoftware)
+[![Release](https://img.shields.io/badge/Download-v1.0.0-orange.svg)](https://github.com/segunmicheal27/FastAccountingSoftware/releases/latest)
 
 </div>
+
+---
+
+## ⬇️ Download & Install
+
+> **[👉 Click here to download the latest release (.zip)](https://github.com/segunmicheal27/FastAccountingSoftware/releases/latest)**
+
+1. Download `FastAccountingSoftware-v1.0.0-win-x64.zip` from the Releases page
+2. Extract the ZIP to any folder (e.g. `C:\FastAccountingSoftware\`)
+3. Double-click **`FastAccountingSoftware.exe`** to launch
+4. No installation required — it's fully portable
+
+> ⚠️ **Requirement:** [.NET 8.0 Desktop Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) must be installed on the target PC. Download the **".NET Desktop Runtime 8"** (not SDK).
+
+---
+
+## 🚀 First-Time Setup (Getting Started)
+
+Follow these steps when you open the app for the very first time:
+
+### Step 1 — Log in as Admin
+Use the default admin credentials:
+
+| Field | Value |
+|-------|-------|
+| **Role** | Admin |
+| **Username / Email** | `adaezeadeola` |
+| **Password** | `password` |
+
+> On the login screen, make sure **"Admin"** tab is selected (not Staff), then enter the credentials above and click **Sign In** or press **Enter**.
+
+---
+
+### Step 2 — Load Demo Data
+The app starts with an empty database. To populate it with realistic sample data (customers, transactions, staff, invoices, inventory):
+
+1. After logging in, click **⚙ Settings** at the bottom of the left sidebar
+2. Scroll to the **"Data Management"** section
+3. Click the **"Load Demo Data"** button
+4. Wait a few seconds — the system will seed ~1,500+ records including:
+   - 50+ customers with Nigerian business names
+   - Income & expense transactions across 6 months
+   - Staff members with payroll history
+   - Inventory products with stock levels
+   - Invoices in various statuses (Paid, Unpaid, Overdue)
+
+> ✅ Once loaded, navigate to **Dashboard** to see your financial overview, charts, and AI insights.
+
+---
+
+### Step 3 — Set Up Your Company Profile
+1. Click **⚙ Settings** → scroll to **"Company Profile"**
+2. Enter your **Company Name**, **Business Email**, and **Physical Address**
+3. Under **"Financial Preferences"**, set your:
+   - **Currency Symbol** (default: ₦ Nigerian Naira)
+   - **Corporate Income Tax Rate** (default: 30%)
+   - **Fiscal Year Start Month** (default: January)
+4. Click **"Save Financial Settings"**
+
+---
+
+### Step 4 — Change the Default Password
+1. In **Settings**, find the **"Administrator Account"** section
+2. Enter a new secure password
+3. Click **"Update Credentials"**
+
+> 🔐 Do this before adding real business data — the default password `password` is for demo use only.
+
+---
+
+## 🔑 All Demo Login Credentials
+
+| Role | Username | Password | Notes |
+|------|----------|----------|-------|
+| **Admin** | `adaezeadeola` | `password` | Full access to everything |
+| **Staff** | `zainabhauwa` | `password` | Restricted access (no staff tab, no company edit, customer data hidden) |
+| **Staff (by ID)** | `sf-XXXX` | `password` | View Staff IDs from the Staff page when logged in as Admin |
+
+> Staff accounts can be created and managed from the **Staff** page (Admin only). Each staff member gets an auto-generated Staff ID (e.g. `sf-4821`) and username.
 
 ---
 
@@ -23,7 +102,7 @@ A modern, full-featured desktop accounting system built with WPF (.NET 8) for Ni
 
 ### Login Page
 ![Login Page](Screenshots/01_login.png)
-*Dual-role login — Admin & Staff with secure authentication*
+*Dual-role login — Admin & Staff with secure authentication. Press Enter or click Sign In.*
 
 ### Dashboard
 ![Dashboard](Screenshots/02_dashboard.png)
@@ -31,11 +110,11 @@ A modern, full-featured desktop accounting system built with WPF (.NET 8) for Ni
 
 ### Cash Flow Chart
 ![Cash Flow](Screenshots/03_cashflow_chart.png)
-*6-month income vs. expenses bar chart with live data*
+*6-month income vs. expenses with live data from your transactions*
 
 ### Settings & Preferences
 ![Settings](Screenshots/05_settings.png)
-*Company profile, financial preferences, HMO providers, and data management*
+*Company profile, financial preferences, HMO providers, demo data management*
 
 </div>
 
@@ -59,41 +138,41 @@ A modern, full-featured desktop accounting system built with WPF (.NET 8) for Ni
 
 ### 👥 Customer Management
 - **Customer Profiles** — Full name, phone, email, address, date of birth, and notes
-- **Birthday Reminders** — Dashboard widget shows today's and upcoming customer birthdays with a "Send Wishes" shortcut
-- **Message System** — Send personalized wish messages directly to customers via a popup input window
+- **Birthday Reminders** — Dashboard widget shows today's and upcoming customer birthdays
+- **Message System** — Send personalized wish messages to customers via a popup input window
 - **Role-Based Privacy** — Staff users cannot view sensitive customer data (email, phone, address, DOB)
 - **Paginated List** — Fast browsing with 50 records per page and a search bar
 
 ### 👨‍💼 Staff Management
 - **Staff Profiles** — Full contact details, role assignment (Admin/Staff), and department
-- **Auto-Generated Credentials** — System auto-generates secure Staff ID (`sf-XXXX`) and username upon staff creation
-- **Send Credentials** — Admin can send login credentials directly from the staff detail popup
-- **Copy with Feedback** — Copy Staff ID or username to clipboard with visual confirmation dialog
-- **Admin-Only Access** — Staff tab and staff management hidden from non-admin users
+- **Auto-Generated Credentials** — System auto-generates Staff ID (`sf-XXXX`) and username upon creation
+- **Send Credentials** — Admin can send login credentials from the staff detail popup
+- **Copy with Feedback** — Copy Staff ID or username with visual confirmation dialog
+- **Admin-Only Access** — Staff tab hidden from non-admin users
 
 ### 💸 Payroll
 - **Monthly Payroll Runs** — Process payroll for all active staff in a single click
-- **Automatic Deductions** — Applies statutory tax (15%), pension (8%), and HMO premiums automatically
-- **Payroll History** — Paginated historical payroll records per staff member
-- **HMO Providers** — Configure health insurance partners with Bronze/Silver/Gold plan tiers
+- **Automatic Deductions** — Applies statutory tax (15%), pension (8%), and HMO premiums
+- **Payroll History** — Paginated historical payroll records
+- **HMO Providers** — Configure health insurance partners with Bronze/Silver/Gold plans
 
 ### 🧾 Invoices
 - **Create & Manage Invoices** — Generate professional invoices linked to customers
-- **Invoice Status** — Track Paid / Unpaid / Overdue status at a glance
-- **Invoice Detail View** — Full line-item view with customer info, totals, and dates
+- **Invoice Status** — Track Paid / Unpaid / Overdue at a glance
 - **PDF Export** — Export invoices as PDF for sharing with clients
 
 ### 📊 Reports
-- **Financial Summary Reports** — Monthly income, expenses, and net profit reports
+- **Financial Summary Reports** — Monthly income, expenses, and net profit
 - **Export to PDF** — Save and share full financial reports
-- **Date Range Filtering** — Filter reports by custom date ranges
+- **Date Range Filtering** — Filter by custom date ranges
 
 ### 🔐 Role-Based Access Control
+
 | Feature | Admin | Staff |
 |---------|-------|-------|
-| Dashboard | ✅ Full access | ✅ Limited |
+| Dashboard | ✅ Full | ✅ Limited |
 | Income & Expenses | ✅ | ✅ |
-| Customer details (email, phone, DOB) | ✅ Visible | ❌ Hidden |
+| Customer sensitive data (email, phone, DOB) | ✅ Visible | ❌ Hidden |
 | Customer editing | ✅ | ❌ |
 | Staff management tab | ✅ | ❌ Hidden |
 | Payroll | ✅ | ❌ |
@@ -102,7 +181,7 @@ A modern, full-featured desktop accounting system built with WPF (.NET 8) for Ni
 | Reports | ✅ | ✅ |
 
 ### 🤖 AI Assistant
-- Built-in AI panel that flags payroll issues, alerts for overdue invoices, and provides actionable business insights
+- Built-in panel that flags payroll issues, overdue invoices, and provides actionable business insights
 
 ---
 
@@ -120,47 +199,22 @@ A modern, full-featured desktop accounting system built with WPF (.NET 8) for Ni
 
 ---
 
-## 🚀 Getting Started
-
-### Prerequisites
-
-- Windows 10 or Windows 11
-- [.NET 8.0 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) *(for building from source)*
-- Visual Studio 2022+ *(optional, for development)*
-
-### Option 1 — Run from Source
+## 🛠️ Build from Source
 
 ```bash
+# Prerequisites: .NET 8.0 SDK + Visual Studio 2022 (or VS Code)
+
 # Clone the repository
 git clone https://github.com/segunmicheal27/FastAccountingSoftware.git
-
-# Navigate to project directory
 cd FastAccountingSoftware
 
-# Run the application
+# Run in development mode
 dotnet run
+
+# Or build a Release binary
+dotnet build -c Release
+# Output: bin\Release\net8.0-windows\FastAccountingSoftware.exe
 ```
-
-### Option 2 — Install the Executable
-
-> 📦 Download the latest installer from the [Releases](https://github.com/segunmicheal27/FastAccountingSoftware/releases) page.
-
-1. Download `FastAccountingSoftware-Setup.exe`
-2. Run the installer and follow the setup wizard
-3. Launch the app from your Desktop or Start Menu
-
----
-
-## 🔑 Default Login Credentials
-
-When you first launch the app, load the demo data from **Settings → Load Demo Data**, then use:
-
-| Role | Username / Staff ID | Password |
-|------|---------------------|----------|
-| **Admin** | `adaezeadeola` | `password` |
-| **Staff** | `sf-XXXX` *(shown in Staff page)* | `password` |
-
-> ⚠️ Change your admin password immediately after first login via **Settings → Administrator Account**.
 
 ---
 
@@ -195,6 +249,7 @@ FastAccountingSoftware/
 ├── ViewModels/                 # MVVM ViewModels
 ├── App.xaml.cs                 # App entry point & global state
 ├── CustomMessageBox.cs         # Reusable dialog component
+├── installer.iss               # Inno Setup installer script
 └── LICENSE                     # Proprietary license
 ```
 
@@ -204,7 +259,7 @@ FastAccountingSoftware/
 
 ### v1.0.0 (July 2025)
 - ✅ Full admin & staff role-based access control
-- ✅ Inventory management with auto-expense generation on restock
+- ✅ Inventory with auto-expense generation on restock
 - ✅ Customer birthday dashboard widget with send-wishes messaging
 - ✅ Paginated lists (Customers, Staff, Income, Expenses, Payroll)
 - ✅ Monthly payroll processing with automatic deductions
@@ -213,6 +268,8 @@ FastAccountingSoftware/
 - ✅ AI assistant panel for business insights
 - ✅ Send credentials feature for staff onboarding
 - ✅ Custom message dialog for customer communication
+- ✅ Enter key support on login screen
+- ✅ Clipboard copy feedback on staff credentials
 
 ---
 
