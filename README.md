@@ -19,14 +19,15 @@ A modern, full-featured desktop accounting system built with WPF (.NET 8) for Ni
 
 ## ⬇️ Download & Install
 
-> **[👉 Click here to download the latest release (.zip)](https://github.com/segunmicheal27/FastAccountingSoftware/releases/latest)**
+> **[👉 Click here to download the latest release (.exe)](https://github.com/segunmicheal27/FastAccountingSoftware/releases/latest)**
 
-1. Download `FastAccountingSoftware-v1.0.0-win-x64.zip` from the Releases page
-2. Extract the ZIP to any folder (e.g. `C:\FastAccountingSoftware\`)
-3. Double-click **`FastAccountingSoftware.exe`** to launch
-4. No installation required — it's fully portable
+1. Download **`FastAccountingSoftware-v1.0.0-Setup.exe`** from the Releases page
+2. Double-click the file to launch — **no installation wizard needed**
+3. The app opens immediately and runs fully portable from any folder
 
-> ⚠️ **Requirement:** [.NET 8.0 Desktop Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) must be installed on the target PC. Download the **".NET Desktop Runtime 8"** (not SDK).
+> ⚠️ **Windows SmartScreen may appear** — click **"More info"** then **"Run anyway"**. The app is safe.
+
+> ⚠️ **Requirement:** [.NET 8.0 Desktop Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) must be installed on the target PC. Download **".NET Desktop Runtime 8"** (not SDK).
 
 ---
 
@@ -35,15 +36,17 @@ A modern, full-featured desktop accounting system built with WPF (.NET 8) for Ni
 Follow these steps when you open the app for the very first time:
 
 ### Step 1 — Log in as Admin
-Use the default admin credentials:
+The app comes with one built-in admin account ready to use:
 
 | Field | Value |
 |-------|-------|
 | **Role** | Admin |
-| **Username / Email** | `adaezeadeola` |
+| **Username** | `admin` |
 | **Password** | `password` |
 
 > On the login screen, make sure **"Admin"** tab is selected (not Staff), then enter the credentials above and click **Sign In** or press **Enter**.
+
+> ℹ️ **Staff accounts do not exist yet** at this point. Staff logins are only available after you load demo data (Step 2) or after the admin manually creates staff members from the **Staff** page.
 
 ---
 
@@ -84,15 +87,26 @@ The app starts with an empty database. To populate it with realistic sample data
 
 ---
 
-## 🔑 All Demo Login Credentials
+## 🔑 Login Credentials
+
+### Built-in Admin Account (always available)
+| Role | Username | Password | Notes |
+|------|----------|----------|-------|
+| **Admin** | `admin` | `password` | Full access — available immediately on first launch |
+
+### Demo Staff Accounts (only available after loading demo data)
+> ⚠️ **Staff accounts do not exist by default.** They are only created when:
+> - The admin clicks **"Load Demo Data"** in Settings (loads sample staff), OR
+> - The admin manually adds a staff member from the **Staff** page
+
+After loading demo data, these sample staff logins will be available:
 
 | Role | Username | Password | Notes |
 |------|----------|----------|-------|
-| **Admin** | `adaezeadeola` | `password` | Full access to everything |
 | **Staff** | `zainabhauwa` | `password` | Restricted access (no staff tab, no company edit, customer data hidden) |
-| **Staff (by ID)** | `sf-XXXX` | `password` | View Staff IDs from the Staff page when logged in as Admin |
+| **Staff (by ID)** | `sf-XXXX` | `password` | Find each staff member's exact ID on the Staff page (Admin only) |
 
-> Staff accounts can be created and managed from the **Staff** page (Admin only). Each staff member gets an auto-generated Staff ID (e.g. `sf-4821`) and username.
+> 💡 When the admin creates a new staff member, the system auto-generates a unique Staff ID (e.g. `sf-4821`) and a username. The admin can then send or copy the credentials from the staff detail popup.
 
 ---
 
