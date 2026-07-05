@@ -1,0 +1,36 @@
+## .NET / WPF .gitignore
+
+# Build outputs
+bin/
+obj/
+out/
+
+# Visual Studio / Rider
+.vs/
+*.user
+*.suo
+*.userprefs
+*.userosscache
+*.sln.docstates
+.idea/
+
+# NuGet
+*.nupkg
+packages/
+!**/packages/repositories.config
+
+# Local database files (SQLite)
+*.db
+*.db-shm
+*.db-wal
+
+# Publish output
+publish/
+**/publish/
+
+# Logs
+*.log
+
+# OS
+Thumbs.db
+.DS_Store

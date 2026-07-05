@@ -1,0 +1,87 @@
+<Window
+    x:Class="FastAccountingSoftware.Views.AiAssistantWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="AI Financial Assistant"
+    Height="600" Width="480"
+    WindowStartupLocation="CenterOwner"
+    ResizeMode="NoResize"
+    WindowStyle="None"
+    AllowsTransparency="True"
+    Background="Transparent"
+    FontFamily="Segoe UI Variable, Inter, Segoe UI">
+
+    <Border CornerRadius="16" Background="#FAF8F5" BorderBrush="#E2E8F0" BorderThickness="1.5">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="30" ShadowDepth="4" Color="#000000" Opacity="0.18"/>
+        </Border.Effect>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/> <!-- Title / Window Controls -->
+                <RowDefinition Height="*"/>    <!-- Chat History -->
+                <RowDefinition Height="Auto"/> <!-- Input Panel -->
+            </Grid.RowDefinitions>
+
+            <!-- 1. Header Drag Bar -->
+            <Border Grid.Row="0" Background="#1B2A1C" CornerRadius="14,14,0,0" Padding="20,16" MouseLeftButtonDown="Header_MouseLeftButtonDown">
+                <Grid>
+                    <StackPanel Orientation="Horizontal">
+                        <Ellipse Width="10" Height="10" Fill="#FF7A00" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="AI Assistant" FontWeight="Bold" FontSize="16" Foreground="White" VerticalAlignment="Center"/>
+                        <TextBlock Text="• Online" FontSize="11" Foreground="#81C784" Margin="8,0,0,0" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                    </StackPanel>
+                    
+                    <!-- Close button -->
+                    <Button Content="✕" Click="Close_Click" HorizontalAlignment="Right" VerticalAlignment="Center" Background="Transparent" Foreground="#88FFFFFF" FontSize="12" Padding="4,2" MinWidth="24" Height="24" BorderThickness="0" Cursor="Hand"/>
+                </Grid>
+            </Border>
+
+            <!-- 2. Chat Message List -->
+            <ScrollViewer x:Name="ChatScrollViewer" Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="20,16">
+                <StackPanel x:Name="ChatMessagesList">
+                    <!-- Welcoming Message from AI -->
+                    <Border Background="#F1ECE7" CornerRadius="12" Padding="14,12" MaxWidth="360" HorizontalAlignment="Left" Margin="0,0,0,16">
+                        <StackPanel>
+                            <TextBlock Text="AI Assistant" FontSize="11" FontWeight="Bold" Foreground="#64748B" Margin="0,0,0,4"/>
+                            <TextBlock Text="Hello! I am your AI Ledger Assistant. Ask me about your finances, such as:&#x0a;• 'What is our total revenue?'&#x0a;• 'Show operating expenses'&#x0a;• 'How much profit did we make?'&#x0a;• 'List overdue customers'&#x0a;• 'Staff count and payroll sum'" 
+                                       FontSize="14" Foreground="#1E293B" TextWrapping="Wrap" LineHeight="20"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- 3. Bottom Input Box -->
+            <Border Grid.Row="2" Background="White" BorderBrush="#F1ECE7" BorderThickness="0,1,0,0" CornerRadius="0,0,14,14" Padding="20,16">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border Grid.Column="0" Background="#FAF8F5" BorderBrush="#E2E8F0" BorderThickness="1.5" CornerRadius="8" Height="44" Margin="0,0,12,0">
+                        <TextBox x:Name="InputPromptBox" 
+                                 BorderThickness="0" 
+                                 Background="Transparent" 
+                                 VerticalAlignment="Center" 
+                                 Padding="12,0" 
+                                 FontSize="14" 
+                                 Foreground="#1E293B"
+                                 KeyDown="InputPromptBox_KeyDown"/>
+                    </Border>
+
+                    <Button Grid.Column="1" 
+                            Content="Send" 
+                            Click="Send_Click" 
+                            Width="80" 
+                            Height="44" 
+                            Background="#FF7A00" 
+                            Foreground="White" 
+                            BorderThickness="0" 
+                            FontWeight="Bold" 
+                            Cursor="Hand"/>
+                </Grid>
+            </Border>
+        </Grid>
+    </Border>
+</Window>

@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "FastAccountingSoftware (Unpackaged)": {
+      "commandName": "Project"
+    },
+    "FastAccountingSoftware (Package)": {
+      "commandName": "MsixPackage"
+    }
+  }
+}

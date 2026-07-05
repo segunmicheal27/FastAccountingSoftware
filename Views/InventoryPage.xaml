@@ -1,0 +1,186 @@
+<Page
+    x:Class="FastAccountingSoftware.Views.InventoryPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="Transparent"
+    FontFamily="Segoe UI Variable, Inter, Segoe UI">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Grid Grid.Row="0" Margin="0,0,0,24">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0">
+                <TextBlock Text="Inventory &amp; Products" FontSize="32" FontWeight="Bold" Foreground="#1E293B"/>
+                <TextBlock Text="Track product stock, unit costs, selling prices, and reorder levels." Foreground="#555555" Margin="0,4,0,0"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                <!-- Export Dropdown -->
+                <Button Content="📥 Export Data ▼" Click="Export_Click" Height="42" Padding="16,0" 
+                        Background="#FAF6F0" Foreground="#1E293B" BorderBrush="#E5E1D6" BorderThickness="1" 
+                        Margin="0,0,12,0" Cursor="Hand">
+                    <Button.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Export as Excel CSV" Click="ExportExcel_Click"/>
+                            <MenuItem Header="Export as Word Document" Click="ExportWord_Click"/>
+                            <MenuItem Header="Export as PDF Document" Click="ExportPdf_Click"/>
+                        </ContextMenu>
+                    </Button.ContextMenu>
+                </Button>
+
+                <!-- New Product Button -->
+                <Button Click="NewProduct_Click" Height="42" Padding="20,0" 
+                        Background="#1B2A1C" Foreground="White" BorderThickness="0" Cursor="Hand">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="+" FontSize="18" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"/>
+                        <TextBlock Text="Add Product" FontSize="14" FontWeight="Bold" Foreground="White" Margin="6,0,0,0" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <!-- Main Content Border Grid -->
+        <Border Grid.Row="1" Background="White" CornerRadius="12" Padding="24" BorderBrush="#E5E1D6" BorderThickness="1">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="15" ShadowDepth="1.5" Direction="270" Color="#000000" Opacity="0.03"/>
+            </Border.Effect>
+            
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Search Input -->
+                <Grid Grid.Row="0" Margin="0,0,0,20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="320"/>
+                        <ColumnDefinition Width="12"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <Border Grid.Column="0" Background="#FAF6F0" BorderBrush="#E5E1D6" BorderThickness="1" CornerRadius="8" Height="40">
+                        <Grid Margin="12,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="🔍" FontSize="14" Foreground="#94A3B8" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <TextBox x:Name="SearchBox" Grid.Column="1" BorderThickness="0" Background="Transparent" VerticalAlignment="Center" 
+                                     Foreground="#1E293B" FontSize="13" TextChanged="SearchBox_TextChanged" IsEnabled="True"/>
+                        </Grid>
+                    </Border>
+
+                    <ToggleButton x:Name="RestockFilterButton" Grid.Column="2" Content="⚠️ Needs Restock" Click="RestockFilterButton_Click" Height="40" Padding="16,0" Background="#FAF6F0" Foreground="#E65100" BorderBrush="#FFD180" BorderThickness="1.5" Cursor="Hand"/>
+                </Grid>
+
+                <!-- Products Table -->
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Table Headers -->
+                    <Grid Grid.Row="0" Margin="12,0,12,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2.5*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1.8*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" Text="PRODUCT NAME" FontSize="11" FontWeight="Bold" Foreground="#94A3B8"/>
+                        <TextBlock Grid.Column="1" Text="QTY IN STOCK" FontSize="11" FontWeight="Bold" Foreground="#94A3B8"/>
+                        <TextBlock Grid.Column="2" Text="COST PRICE" FontSize="11" FontWeight="Bold" Foreground="#94A3B8"/>
+                        <TextBlock Grid.Column="3" Text="SELLING PRICE" FontSize="11" FontWeight="Bold" Foreground="#94A3B8"/>
+                        <TextBlock Grid.Column="4" Text="REORDER LVL" FontSize="11" FontWeight="Bold" Foreground="#94A3B8"/>
+                        <TextBlock Grid.Column="5" Text="STATUS" FontSize="11" FontWeight="Bold" Foreground="#94A3B8"/>
+                        <TextBlock Grid.Column="6" Text="ACTIONS" FontSize="11" FontWeight="Bold" Foreground="#94A3B8" HorizontalAlignment="Right"/>
+                    </Grid>
+                    
+                    <Rectangle Grid.Row="0" Height="1" Fill="#E2E8F0" VerticalAlignment="Bottom"/>
+
+                    <!-- Scrollable Product List -->
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <ItemsControl x:Name="InventoryItemsList" Margin="0,8,0,0">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <Grid Margin="12,4" Background="Transparent" Cursor="Hand" Tag="{Binding}" MouseLeftButtonUp="ProductRow_Click">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="2.5*"/>
+                                                <ColumnDefinition Width="1*"/>
+                                                <ColumnDefinition Width="1*"/>
+                                                <ColumnDefinition Width="1*"/>
+                                                <ColumnDefinition Width="1*"/>
+                                                <ColumnDefinition Width="1*"/>
+                                                <ColumnDefinition Width="1.8*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <!-- Product Title -->
+                                            <TextBlock Grid.Column="0" Text="{Binding Name}" Foreground="#1E293B" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                            
+                                            <!-- Qty -->
+                                            <TextBlock Grid.Column="1" Text="{Binding Quantity}" Foreground="#1E293B" VerticalAlignment="Center"/>
+                                            
+                                            <!-- Cost Price -->
+                                            <TextBlock Grid.Column="2" Text="{Binding CostPriceText}" Foreground="#555555" VerticalAlignment="Center"/>
+                                            
+                                            <!-- Selling Price -->
+                                            <TextBlock Grid.Column="3" Text="{Binding SellingPriceText}" Foreground="#1E293B" FontWeight="Bold" VerticalAlignment="Center"/>
+                                            
+                                            <!-- Reorder Level -->
+                                            <TextBlock Grid.Column="4" Text="{Binding ReorderLevel}" Foreground="#555555" VerticalAlignment="Center"/>
+                                            
+                                            <!-- Stock Status Badge -->
+                                            <Border Grid.Column="5" Background="{Binding StatusBg}" CornerRadius="12" Padding="8,4" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding StockStatus}" Foreground="{Binding StatusFg}" FontSize="11" FontWeight="Bold"/>
+                                            </Border>
+
+                                            <!-- Action Buttons -->
+                                            <StackPanel Grid.Column="6" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                                <Button Content="⚡ Restock" Click="QuickRestock_Click" Tag="{Binding}" FontSize="11" Padding="6,3" Margin="0,0,4,0" Background="#E8F5E9" Foreground="#2E7D32" BorderBrush="#A5D6A7" BorderThickness="1" Cursor="Hand"/>
+                                                <Button Content="✎ Edit" Click="EditProduct_Click" Tag="{Binding}" FontSize="11" Padding="6,3" Margin="0,0,4,0" Background="#FAF6F0" Foreground="#1E293B" BorderBrush="#E5E1D6" BorderThickness="1" Cursor="Hand"/>
+                                                <Button Content="🗑 Del" Click="DeleteProduct_Click" Tag="{Binding}" FontSize="11" Padding="6,3" Background="#FFF5F5" Foreground="#C92A2A" BorderBrush="#FFC9C9" BorderThickness="1" Cursor="Hand"/>
+                                            </StackPanel>
+                                        </Grid>
+                                        <Rectangle Height="1" Fill="#eeeeee" Margin="0,6"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+
+                <!-- Pagination Bar -->
+                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+                    <Button Content="&lt; Prev" Click="Prev_Click"
+                            Background="#1B2A1C" Foreground="White" Padding="10,6"
+                            FontSize="12" Margin="4,0" BorderThickness="0" Cursor="Hand"/>
+                    <TextBlock x:Name="PageInfoText" Text="Page 1 of 1"
+                               FontSize="13" VerticalAlignment="Center" Margin="8,0"/>
+                    <Button Content="Next &gt;" Click="Next_Click"
+                            Background="#1B2A1C" Foreground="White" Padding="10,6"
+                            FontSize="12" Margin="4,0" BorderThickness="0" Cursor="Hand"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Page>

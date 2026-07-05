@@ -1,0 +1,62 @@
+<Window
+    x:Class="FastAccountingSoftware.Views.CustomMessageBoxWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Notification"
+    Height="220" Width="420"
+    WindowStartupLocation="CenterOwner"
+    ResizeMode="NoResize"
+    WindowStyle="None"
+    AllowsTransparency="True"
+    Background="Transparent"
+    FontFamily="Segoe UI Variable, Inter, Segoe UI">
+
+    <Border CornerRadius="12" Background="#FAF8F5" BorderBrush="#E2E8F0" BorderThickness="1.5">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="25" ShadowDepth="4" Color="#000000" Opacity="0.15"/>
+        </Border.Effect>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/> <!-- Title/Drag Bar -->
+                <RowDefinition Height="*"/>    <!-- Content -->
+                <RowDefinition Height="Auto"/> <!-- Buttons -->
+            </Grid.RowDefinitions>
+
+            <!-- Title / Header -->
+            <Border Grid.Row="0" Background="#F1ECE7" CornerRadius="10,10,0,0" Padding="16,10">
+                <Grid>
+                    <TextBlock x:Name="TitleText" Text="Fast Accounting Software" FontWeight="Bold" FontSize="13" Foreground="#1E293B" VerticalAlignment="Center"/>
+                    <!-- Close button in top-right -->
+                    <Button Content="✕" Click="Close_Click" HorizontalAlignment="Right" VerticalAlignment="Center" Background="Transparent" Foreground="#64748B" FontSize="11" Padding="4,2" MinWidth="20" Height="20" BorderThickness="0"/>
+                </Grid>
+            </Border>
+
+            <!-- Content Area -->
+            <Grid Grid.Row="1" Margin="20,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Icon Container -->
+                <Grid Grid.Column="0" Width="44" Height="44" VerticalAlignment="Top" Margin="0,4,16,0">
+                    <Ellipse x:Name="IconCircle" Fill="#E2FBE7"/>
+                    <TextBlock x:Name="IconGlyph" Text="✓" FontSize="20" FontWeight="Bold" Foreground="#10B981" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Grid>
+
+                <!-- Message Text -->
+                <TextBlock x:Name="MessageText" Grid.Column="1" Text="Message content goes here." FontSize="14" Foreground="#334155" TextWrapping="Wrap" VerticalAlignment="Center" LineHeight="20"/>
+            </Grid>
+
+            <!-- Buttons Footer -->
+            <Border Grid.Row="2" Background="White" BorderBrush="#F1ECE7" BorderThickness="0,1,0,0" CornerRadius="0,0,10,10" Padding="16,12">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button x:Name="ButtonNo" Content="No" Click="No_Click" Margin="0,0,8,0" Padding="20,8" Background="Transparent" Foreground="#64748B" Visibility="Collapsed"/>
+                    <Button x:Name="ButtonYes" Content="Yes" Click="Yes_Click" Padding="20,8" Background="#1E293B" Foreground="White" Visibility="Collapsed"/>
+                    <Button x:Name="ButtonOk" Content="OK" Click="Ok_Click" Padding="24,8" Background="#1E293B" Foreground="White"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Border>
+</Window>

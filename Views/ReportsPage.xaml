@@ -1,0 +1,64 @@
+<Page
+    x:Class="FastAccountingSoftware.Views.ReportsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="Transparent">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Grid Grid.Row="0" Margin="0,0,0,24">
+            <StackPanel>
+                <TextBlock Text="Reports" FontSize="32" FontWeight="Bold" Foreground="#1E293B"/>
+                <TextBlock Text="Generate financial statements and summaries." Foreground="#555555" Margin="0,4,0,0"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- Content -->
+        <Border Grid.Row="1" Background="White" CornerRadius="12" Padding="24" BorderBrush="#e6e1d6" BorderThickness="1" VerticalAlignment="Top">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                
+                <Border Grid.Column="0" Background="#FFFFFF" CornerRadius="8" Padding="24" BorderBrush="#FFF8F5" BorderThickness="1" Margin="0,0,12,0">
+                    <StackPanel>
+                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE9F9;" Foreground="#F44336" FontSize="24" HorizontalAlignment="Left" Margin="0,0,0,16" />
+                        <TextBlock Text="Profit &amp; Loss" FontSize="18" FontWeight="Bold" Foreground="#1E293B" Margin="0,0,0,8" />
+                        <TextBlock Text="View your revenue against your expenses over a period." Foreground="#888888" TextWrapping="Wrap" Margin="0,0,0,24" />
+                        <Button Content="Generate Report" Click="GenerateProfitLoss_Click" Background="#1E293B" Foreground="#FF7A00" Padding="16,8,16,8" HorizontalAlignment="Stretch" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="1" Background="#FFFFFF" CornerRadius="8" Padding="24" BorderBrush="#FFF8F5" BorderThickness="1" Margin="12,0,12,0">
+                    <StackPanel>
+                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8B1;" Foreground="#FF7A00" FontSize="24" HorizontalAlignment="Left" Margin="0,0,0,16" />
+                        <TextBlock Text="Balance Sheet" FontSize="18" FontWeight="Bold" Foreground="#1E293B" Margin="0,0,0,8" />
+                        <TextBlock Text="A snapshot of your business's financial position at a given time." Foreground="#888888" TextWrapping="Wrap" Margin="0,0,0,24" />
+                        <Button Content="Generate Report" Click="GenerateBalanceSheet_Click" Background="#1E293B" Foreground="#FF7A00" Padding="16,8,16,8" HorizontalAlignment="Stretch" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="2" Background="#FFFFFF" CornerRadius="8" Padding="24" BorderBrush="#FFF8F5" BorderThickness="1" Margin="12,0,0,0">
+                    <StackPanel>
+                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE7A7;" Foreground="#4285F4" FontSize="24" HorizontalAlignment="Left" Margin="0,0,0,16" />
+                        <TextBlock Text="Tax Summary" FontSize="18" FontWeight="Bold" Foreground="#1E293B" Margin="0,0,0,8" />
+                        <TextBlock Text="Calculate estimated tax liabilities for the fiscal year." Foreground="#888888" TextWrapping="Wrap" Margin="0,0,0,24" />
+                        <Button Content="Generate Report" Click="GenerateTaxSummary_Click" Background="#1E293B" Foreground="#FF7A00" Padding="16,8,16,8" HorizontalAlignment="Stretch" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</Page>
+
+

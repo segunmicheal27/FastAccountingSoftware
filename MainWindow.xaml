@@ -1,0 +1,9 @@
+ <Window x:Class="FastAccountingSoftware.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Fast Accounting Dashboard" WindowState="Maximized" MinWidth="1280" MinHeight="800"
+        WindowStartupLocation="CenterScreen" Icon="Assets\WindowIcon.ico">
+    <Grid>
+        <Frame x:Name="RootFrame" NavigationUIVisibility="Hidden" />
+    </Grid>
+</Window>
