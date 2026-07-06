@@ -28,6 +28,7 @@ namespace FastAccountingSoftware.Views
                         BirthdayTemplateBox.Text = profile.BirthdayTemplate;
                         DisableCmsCheck.IsChecked = profile.DisableCms;
                         DisablePosCheck.IsChecked = profile.DisablePos;
+                        DisableHrmsCheck.IsChecked = profile.DisableHrms;
                     }
                 }
             }
@@ -160,12 +161,15 @@ namespace FastAccountingSoftware.Views
                 if (!dbContext.Users.Any(u => u.Username == "staff"))
                     dbContext.Users.Add(new User { Username = "staff", PasswordHash = "staff", Role = UserRole.Staff });
 
+                if (!dbContext.Users.Any(u => u.Username == "hr"))
+                    dbContext.Users.Add(new User { Username = "hr", PasswordHash = "hr", Role = UserRole.Hr });
+
                 // ── 2. 6,000 Customers ────────────────────────────────────
                 var statuses = new[] { CustomerStatus.Current, CustomerStatus.Current, CustomerStatus.Current, CustomerStatus.Pending, CustomerStatus.Overdue };
                 string[] areas = { "Ikeja", "Victoria Island", "Lekki Phase 1", "Ikoyi", "Yaba", "Surulere", "Apapa", "Maryland", "Gbagada" };
                 string[] streets = { "Adeniran Ogunsanya St", "Bode Thomas St", "Herbert Macaulay Way", "Adetokunbo Ademola St", "Joel Ogunnaike St", "Allen Avenue", "Isaac John St", "Kingsway Road", "Ozumba Mbadiwe Ave" };
                 var customers = new List<Customer>();
-                for (int i = 0; i < 6000; i++)
+                for (int i = 0; i < 12000; i++)
                 {
                     string fn = firstNames[rng.Next(firstNames.Length)];
                     string ln = lastNames[rng.Next(lastNames.Length)];
@@ -223,8 +227,16 @@ namespace FastAccountingSoftware.Views
                 foreach (var s in staffList)
                 {
                     string cleanName = s.Name.ToLower().Replace(" ", "");
-                    dbContext.Users.Add(new User { Username = s.StaffId.ToLower(), PasswordHash = "password", Role = UserRole.Staff });
-                    dbContext.Users.Add(new User { Username = cleanName, PasswordHash = "password", Role = UserRole.Staff });
+                    UserRole userRole = UserRole.Staff;
+                    if (s.Role.Contains("HR", StringComparison.OrdinalIgnoreCase) || 
+                        s.Department.Contains("HR", StringComparison.OrdinalIgnoreCase) || 
+                        s.Department.Contains("Human Resources", StringComparison.OrdinalIgnoreCase))
+                    {
+                        userRole = UserRole.Hr;
+                    }
+
+                    dbContext.Users.Add(new User { Username = s.StaffId.ToLower(), PasswordHash = "password", Role = userRole });
+                    dbContext.Users.Add(new User { Username = cleanName, PasswordHash = "password", Role = userRole });
                 }
 
                 // ── 4. 30 Payroll Cycles ─────────────────────────────────
@@ -260,14 +272,14 @@ namespace FastAccountingSoftware.Views
                 DateTime txStart = DateTime.Now.AddYears(-2);
                 
                 // Income: 5,000 total (1,500 of which are Invoices)
-                for (int i = 0; i < 5000; i++)
+                for (int i = 0; i < 10000; i++)
                 {
                     DateTime date = txStart.AddMinutes(rng.Next(1, 365 * 2 * 24 * 60));
                     double amount = rng.Next(2000, 750000);
                     var cust = customers[rng.Next(customers.Count)];
                     
                     string description;
-                    if (i < 1500)
+                    if (i < 3000)
                     {
                         // Exactly 1,500 invoices
                         description = $"Invoice #INV-{rng.Next(2100, 9999)} • {cust.Name}";
@@ -289,7 +301,7 @@ namespace FastAccountingSoftware.Views
                 }
 
                 // Expenses: 1,200 total
-                for (int i = 0; i < 1200; i++)
+                for (int i = 0; i < 3000; i++)
                 {
                     DateTime date = txStart.AddMinutes(rng.Next(1, 365 * 2 * 24 * 60));
                     double amount = rng.Next(2000, 150000);
@@ -309,7 +321,7 @@ namespace FastAccountingSoftware.Views
                     "Network Switch 24-Port", "External Hard Drive 2TB", "Bluetooth Conference Speaker", "Whiteboard 4x3 Ft", "LED Desk Lamp" };
                 
                 var inventoryList = new List<InventoryItem>();
-                for (int i = 0; i < 2800; i++)
+                for (int i = 0; i < 5000; i++)
                 {
                     string baseName = productNames[rng.Next(productNames.Length)];
                     string finalName = $"{baseName} Model-{rng.Next(100, 999)} #{i+1}";
@@ -334,7 +346,7 @@ namespace FastAccountingSoftware.Views
 
                 dbContext.SaveChanges();
 
-                StatusMessage.Text = $"✅ Success! Loaded 6,000 customers · 30 staff · 12 HMOs · 30 payroll cycles · 5,000 income (incl. 1,500 invoices) · 1,200 expenses · 2,800 products.";
+                StatusMessage.Text = $"✅ Success! Loaded 12,000 customers · 30 staff · 12 HMOs · 30 payroll cycles · 10,000 income (incl. 3,000 invoices) · 3,000 expenses · 5,000 products (Total ~30,000 database records).";
                 StatusMessage.Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Green);
                 StatusMessage.Visibility = Visibility.Visible;
 
@@ -446,6 +458,7 @@ namespace FastAccountingSoftware.Views
             string taxRate = TaxRateBox.Text;
             bool disableCms = DisableCmsCheck.IsChecked ?? false;
             bool disablePos = DisablePosCheck.IsChecked ?? false;
+            bool disableHrms = DisableHrmsCheck.IsChecked ?? false;
 
             try
             {
@@ -456,13 +469,19 @@ namespace FastAccountingSoftware.Views
                     {
                         profile.DisableCms = disableCms;
                         profile.DisablePos = disablePos;
+                        profile.DisableHrms = disableHrms;
                         dbContext.CompanyProfiles.Update(profile);
                         dbContext.SaveChanges();
                     }
                 }
 
+                if (App.CurrentWindow.AppFrame.Content is MainPage mainPage)
+                {
+                    mainPage.ReloadModuleVisibility();
+                }
+
                 CustomMessageBox.Show(
-                    $"Financial Preferences Saved!\n\nCurrency symbol: {currency}\nTax Rate: {taxRate}%\nDisable CMS: {disableCms}\nDisable POS: {disablePos}",
+                    $"Financial Preferences Saved!\n\nCurrency symbol: {currency}\nTax Rate: {taxRate}%\nDisable CMS: {disableCms}\nDisable POS: {disablePos}\nDisable HRMS: {disableHrms}",
                     "Settings Saved",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information

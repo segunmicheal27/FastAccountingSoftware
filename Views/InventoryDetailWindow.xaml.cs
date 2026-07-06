@@ -2,6 +2,7 @@ using FastAccountingSoftware.Models;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows;
+using System.Windows.Controls;
 using System;
 
 namespace FastAccountingSoftware.Views
@@ -40,6 +41,79 @@ namespace FastAccountingSoftware.Views
                 StatusBadge.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E8F5E9"));
                 StatusText.Text = "✓ In Stock — Good standing";
                 StatusText.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#2E7D32"));
+            }
+
+            // Populate Dynamic Excel Attributes
+            DynamicAttributesContainer.Children.Clear();
+            if (!string.IsNullOrEmpty(i.CustomAttributesJson) && i.CustomAttributesJson != "{}")
+            {
+                try
+                {
+                    string content = i.CustomAttributesJson.Trim('{', '}');
+                    var matches = System.Text.RegularExpressions.Regex.Matches(content, @"""([^""]+)""\s*:\s*""([^""]*)""");
+                    if (matches.Count > 0)
+                    {
+                        DynamicAttributesSection.Visibility = Visibility.Visible;
+                        foreach (System.Text.RegularExpressions.Match m in matches)
+                        {
+                            string key = m.Groups[1].Value;
+                            string val = m.Groups[2].Value;
+
+                            var border = new Border
+                            {
+                                Background = new SolidColorBrush(Color.FromRgb(248, 250, 252)),
+                                CornerRadius = new CornerRadius(8),
+                                Padding = new Thickness(14, 10, 14, 10),
+                                BorderBrush = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
+                                BorderThickness = new Thickness(1),
+                                Margin = new Thickness(0, 0, 0, 8)
+                            };
+
+                            var grid = new Grid();
+                            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(140) });
+                            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+
+                            var tbKey = new TextBlock
+                            {
+                                Text = key.ToUpper(),
+                                FontSize = 10,
+                                FontWeight = FontWeights.Bold,
+                                Foreground = new SolidColorBrush(Color.FromRgb(148, 163, 184)),
+                                VerticalAlignment = VerticalAlignment.Center
+                            };
+
+                            var tbVal = new TextBlock
+                            {
+                                Text = val,
+                                FontSize = 13,
+                                FontWeight = FontWeights.SemiBold,
+                                Foreground = new SolidColorBrush(Color.FromRgb(30, 41, 59)),
+                                TextWrapping = TextWrapping.Wrap,
+                                VerticalAlignment = VerticalAlignment.Center
+                            };
+
+                            Grid.SetColumn(tbKey, 0);
+                            Grid.SetColumn(tbVal, 1);
+                            grid.Children.Add(tbKey);
+                            grid.Children.Add(tbVal);
+
+                            border.Child = grid;
+                            DynamicAttributesContainer.Children.Add(border);
+                        }
+                    }
+                    else
+                    {
+                        DynamicAttributesSection.Visibility = Visibility.Collapsed;
+                    }
+                }
+                catch 
+                {
+                    DynamicAttributesSection.Visibility = Visibility.Collapsed;
+                }
+            }
+            else
+            {
+                DynamicAttributesSection.Visibility = Visibility.Collapsed;
             }
         }
 

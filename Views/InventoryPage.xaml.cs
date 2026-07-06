@@ -7,29 +7,34 @@ using System;
 
 namespace FastAccountingSoftware.Views
 {
-    public partial class InventoryPage : Page
+    public partial class InventoryPage : Page, ISearchablePage
     {
         private const int PageSize = 10;
         private int _currentPage = 1;
         private int _totalPages = 1;
-        private List<InventoryItem> _allItems = new List<InventoryItem>();
-        private List<InventoryItem> _filteredItems = new List<InventoryItem>();
+        private List<InventoryItem> _allItems = new();
+        private List<InventoryItem> _filteredItems = new();
         private bool _onlyNeedsRestock = false;
 
         public InventoryPage()
         {
             InitializeComponent();
-            LoadData();
+            this.Loaded += (s, e) => LoadDataAsync();
         }
 
-        private void LoadData()
+        public async void LoadDataAsync()
         {
             try
             {
-                using (var dbContext = new AppDbContext())
+                List<InventoryItem> list = null;
+                await System.Threading.Tasks.Task.Run(() =>
                 {
-                    _allItems = dbContext.InventoryItems.ToList();
-                }
+                    using (var dbContext = new AppDbContext())
+                    {
+                        list = dbContext.InventoryItems.ToList();
+                    }
+                });
+                _allItems = list ?? new List<InventoryItem>();
                 ApplySearch();
             }
             catch (Exception ex)
@@ -40,7 +45,12 @@ namespace FastAccountingSoftware.Views
 
         private void ApplySearch()
         {
-            string query = SearchBox.Text.Trim().ToLower();
+            PerformSearch(SearchBox.Text);
+        }
+
+        public void PerformSearch(string query)
+        {
+            query = query?.Trim().ToLower() ?? "";
             var list = _allItems.ToList();
             if (_onlyNeedsRestock)
             {
@@ -48,7 +58,7 @@ namespace FastAccountingSoftware.Views
             }
             if (!string.IsNullOrEmpty(query))
             {
-                list = list.Where(i => i.Name.ToLower().Contains(query)).ToList();
+                list = list.Where(i => (i.Name?.ToLower() ?? "").Contains(query)).ToList();
             }
             _filteredItems = list;
             _currentPage = 1;
@@ -103,7 +113,7 @@ namespace FastAccountingSoftware.Views
                         
                         dbContext.SaveChanges();
                     }
-                    LoadData();
+                    LoadDataAsync();
                     CustomMessageBox.Show($"Successfully restocked 100 units of '{item.Name}' and recorded ₦{costAmount:N0} purchase expense.", "Restock Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
@@ -131,6 +141,15 @@ namespace FastAccountingSoftware.Views
             }
         }
 
+        private void ImportExcel_Click(object sender, RoutedEventArgs e)
+        {
+            var win = new ImportWizardWindow { Owner = Window.GetWindow(this) };
+            if (win.ShowDialog() == true)
+            {
+                LoadDataAsync();
+            }
+        }
+
         private void NewProduct_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new AddInventoryWindow(null)
@@ -146,7 +165,7 @@ namespace FastAccountingSoftware.Views
                         dbContext.InventoryItems.Add(dialog.NewItem);
                         dbContext.SaveChanges();
                     }
-                    LoadData();
+                    LoadDataAsync();
                 }
                 catch (Exception ex)
                 {
@@ -157,12 +176,22 @@ namespace FastAccountingSoftware.Views
 
         private void ProductRow_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (e.OriginalSource is Button || e.OriginalSource is System.Windows.Documents.Run) return;
+            if (e.OriginalSource is Button || e.OriginalSource is System.Windows.Documents.Run || e.OriginalSource is System.Windows.Controls.Image) return;
             if (sender is System.Windows.FrameworkElement el && el.Tag is InventoryItem item)
             {
                 var win = new InventoryDetailWindow(item) { Owner = Window.GetWindow(this) };
                 win.ShowDialog();
-                LoadData();
+                LoadDataAsync();
+            }
+        }
+
+        private void ViewProduct_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.Tag is InventoryItem item)
+            {
+                var win = new InventoryDetailWindow(item) { Owner = Window.GetWindow(this) };
+                win.ShowDialog();
+                LoadDataAsync();
             }
         }
 
@@ -183,7 +212,7 @@ namespace FastAccountingSoftware.Views
                             dbContext.InventoryItems.Update(item);
                             dbContext.SaveChanges();
                         }
-                        LoadData();
+                        LoadDataAsync();
                     }
                     catch (Exception ex)
                     {
@@ -207,7 +236,7 @@ namespace FastAccountingSoftware.Views
                             dbContext.InventoryItems.Remove(item);
                             dbContext.SaveChanges();
                         }
-                        LoadData();
+                        LoadDataAsync();
                     }
                     catch (Exception ex)
                     {

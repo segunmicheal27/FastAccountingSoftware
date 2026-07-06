@@ -7,68 +7,71 @@ using System.Collections.Generic;
 
 namespace FastAccountingSoftware.Views
 {
-    public partial class InvoicesPage : Page
+    public partial class InvoicesPage : Page, ISearchablePage
     {
         private const int PageSize = 10;
         private int _currentPage = 1;
         private int _totalPages = 1;
         private List<InvoiceViewModel> _allItems = new List<InvoiceViewModel>();
+        private List<InvoiceViewModel> _filteredItems = new List<InvoiceViewModel>();
+        private string _searchQuery = "";
 
         public InvoicesPage()
         {
             InitializeComponent();
-            LoadData();
+            this.Loaded += (s, e) => LoadDataAsync();
         }
 
-        private void LoadData()
+        private async void LoadDataAsync()
         {
             try
             {
-                using (var dbContext = new AppDbContext())
+                var invoices = new List<InvoiceViewModel>();
+                await System.Threading.Tasks.Task.Run(() =>
                 {
-                    var invoices = new List<InvoiceViewModel>();
-                    var transactions = dbContext.Transactions
-                        .Where(t => t.Type == TransactionType.Income && t.Description.Contains("Invoice #"))
-                        .ToList()
-                        .OrderByDescending(t => t.Date)
-                        .ToList();
-
-                    foreach (var t in transactions)
+                    using (var dbContext = new AppDbContext())
                     {
-                        string invNo = "INV-0000";
-                        string customer = "Unknown Customer";
+                        var transactions = dbContext.Transactions
+                            .Where(t => t.Type == TransactionType.Income && t.Description.Contains("Invoice #"))
+                            .ToList()
+                            .OrderByDescending(t => t.Date)
+                            .ToList();
 
-                        // Parse description: "Invoice #INV-2291 • Adaeze Foods Ltd"
-                        try
+                        foreach (var t in transactions)
                         {
-                            var parts = t.Description.Split('•');
-                            if (parts.Length >= 2)
+                            string invNo = "INV-0000";
+                            string customer = "Unknown Customer";
+
+                            // Parse description: "Invoice #INV-2291 • Adaeze Foods Ltd"
+                            try
                             {
-                                invNo = parts[0].Replace("Invoice #", "").Trim();
-                                customer = parts[1].Trim();
+                                var parts = t.Description.Split('•');
+                                if (parts.Length >= 2)
+                                {
+                                    invNo = parts[0].Replace("Invoice #", "").Trim();
+                                    customer = parts[1].Trim();
+                                }
+                                else
+                                {
+                                    invNo = t.Description.Replace("Invoice #", "").Trim();
+                                }
                             }
-                            else
+                            catch { }
+
+                            invoices.Add(new InvoiceViewModel
                             {
-                                invNo = t.Description.Replace("Invoice #", "").Trim();
-                            }
+                                InvoiceNumber = invNo,
+                                CustomerName = customer,
+                                IssuedDate = t.Date.ToString("dd MMM yyyy"),
+                                DueDate = t.Date.AddDays(14).ToString("dd MMM yyyy"),
+                                Status = "Paid",
+                                AmountText = $"₦{t.Amount:N0}"
+                            });
                         }
-                        catch { }
-
-                        invoices.Add(new InvoiceViewModel
-                        {
-                            InvoiceNumber = invNo,
-                            CustomerName = customer,
-                            IssuedDate = t.Date.ToString("MMM d, yyyy"),
-                            DueDate = t.Date.AddDays(14).ToString("MMM d, yyyy"),
-                            Status = "Paid",
-                            AmountText = $"₦{t.Amount:N0}"
-                        });
                     }
-
-                    _allItems = invoices;
-                }
-                _currentPage = 1;
-                ApplyPage();
+                });
+                _allItems = invoices;
+                ApplySearch();
             }
             catch (Exception ex)
             {
@@ -76,12 +79,34 @@ namespace FastAccountingSoftware.Views
             }
         }
 
+        public void PerformSearch(string query)
+        {
+            _searchQuery = query?.Trim().ToLower() ?? "";
+            ApplySearch();
+        }
+
+        private void ApplySearch()
+        {
+            if (string.IsNullOrEmpty(_searchQuery))
+            {
+                _filteredItems = _allItems.ToList();
+            }
+            else
+            {
+                _filteredItems = _allItems.Where(i => 
+                    (i.InvoiceNumber?.ToLower() ?? "").Contains(_searchQuery) || 
+                    (i.CustomerName?.ToLower() ?? "").Contains(_searchQuery)).ToList();
+            }
+            _currentPage = 1;
+            ApplyPage();
+        }
+
         private void ApplyPage()
         {
-            _totalPages = Math.Max(1, (int)Math.Ceiling(_allItems.Count / (double)PageSize));
+            _totalPages = Math.Max(1, (int)Math.Ceiling(_filteredItems.Count / (double)PageSize));
             _currentPage = Math.Max(1, Math.Min(_currentPage, _totalPages));
 
-            var pageItems = _allItems
+            var pageItems = _filteredItems
                 .Skip((_currentPage - 1) * PageSize)
                 .Take(PageSize)
                 .ToList();
@@ -105,6 +130,15 @@ namespace FastAccountingSoftware.Views
             {
                 _currentPage++;
                 ApplyPage();
+            }
+        }
+
+        private void ImportExcel_Click(object sender, RoutedEventArgs e)
+        {
+            var win = new ImportWizardWindow { Owner = Window.GetWindow(this) };
+            if (win.ShowDialog() == true)
+            {
+                LoadDataAsync();
             }
         }
 
@@ -134,7 +168,7 @@ namespace FastAccountingSoftware.Views
 
                         dbContext.SaveChanges();
                     }
-                    LoadData();
+                    LoadDataAsync();
                 }
                 catch (Exception ex)
                 {

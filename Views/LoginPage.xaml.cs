@@ -10,8 +10,6 @@ namespace FastAccountingSoftware.Views
 {
     public partial class LoginPage : Page
     {
-        private UserRole _selectedRole = UserRole.Staff;
-
         public LoginPage()
         {
             this.InitializeComponent();
@@ -66,34 +64,6 @@ namespace FastAccountingSoftware.Views
             }
         }
 
-        private void RoleBorder_Tapped(object sender, MouseButtonEventArgs e)
-        {
-            if (sender is Border border)
-            {
-                var activeBorder = new SolidColorBrush(Color.FromArgb(255, 255, 122, 0)); // #FF7A00
-                var activeBg = new SolidColorBrush(Color.FromArgb(255, 255, 248, 245)); // #FFF8F5
-                var inactiveBorder = new SolidColorBrush(Color.FromArgb(255, 230, 230, 230)); // #e6e6e6
-                var inactiveBg = new SolidColorBrush(Colors.Transparent);
-
-                if (border.Tag.ToString() == "Admin")
-                {
-                    _selectedRole = UserRole.Admin;
-                    AdminBorder.BorderBrush = activeBorder;
-                    AdminBorder.Background = activeBg;
-                    StaffBorder.BorderBrush = inactiveBorder;
-                    StaffBorder.Background = inactiveBg;
-                }
-                else
-                {
-                    _selectedRole = UserRole.Staff;
-                    StaffBorder.BorderBrush = activeBorder;
-                    StaffBorder.Background = activeBg;
-                    AdminBorder.BorderBrush = inactiveBorder;
-                    AdminBorder.Background = inactiveBg;
-                }
-            }
-        }
-
         private bool _isPasswordRevealed = false;
 
         private void TogglePassword_Click(object sender, MouseButtonEventArgs e)
@@ -123,12 +93,12 @@ namespace FastAccountingSoftware.Views
         private void SignInButton_Click(object sender, RoutedEventArgs e)
         {
             ErrorText.Visibility = Visibility.Collapsed;
-            string username = UsernameBox.Text;
+            string username = UsernameBox.Text.Trim();
             string password = _isPasswordRevealed ? PasswordTextBox.Text : PasswordBox.Password;
 
             using (var dbContext = new AppDbContext())
             {
-                var user = dbContext.Users.FirstOrDefault(u => u.Username == username && u.PasswordHash == password && u.Role == _selectedRole);
+                var user = dbContext.Users.FirstOrDefault(u => u.Username.ToLower() == username.ToLower() && u.PasswordHash == password);
                 if (user != null)
                 {
                     App.CurrentUser = user;

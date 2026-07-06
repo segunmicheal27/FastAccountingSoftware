@@ -7,7 +7,7 @@ using System;
 
 namespace FastAccountingSoftware.Views
 {
-    public partial class CustomersPage : Page
+    public partial class CustomersPage : Page, ISearchablePage
     {
         private const int PageSize = 10;
         private int _currentPage = 1;
@@ -15,59 +15,64 @@ namespace FastAccountingSoftware.Views
         private List<Customer> _allItems = new List<Customer>();
         private List<Customer> _filteredItems = new List<Customer>();
         private string _statusFilter = "All";
+        private string _searchQuery = "";
 
         public CustomersPage()
         {
             InitializeComponent();
-            LoadData();
+            this.Loaded += (s, e) => LoadDataAsync();
         }
 
-        private string MaskString(string val, bool isEmail)
+        private string MaskEmail(string email)
         {
-            if (string.IsNullOrEmpty(val)) return string.Empty;
-            if (isEmail)
+            if (string.IsNullOrEmpty(email)) return string.Empty;
+            var parts = email.Split('@');
+            if (parts.Length == 2)
             {
-                var parts = val.Split('@');
-                if (parts.Length == 2)
-                {
-                    string name = parts[0];
-                    string domain = parts[1];
-                    if (name.Length > 2)
-                        return $"{name.Substring(0, 2)}{new string('*', name.Length - 2)}@{domain}";
-                    return $"***@{domain}";
-                }
-                return "***@***.***";
+                string name = parts[0];
+                string domain = parts[1];
+                if (name.Length > 2)
+                    return $"{name.Substring(0, 2)}{new string('*', name.Length - 2)}@{domain}";
+                return $"***@{domain}";
             }
-            else
-            {
-                if (val.Length > 4)
-                    return $"{val.Substring(0, val.Length - 4)}****";
-                return "****";
-            }
+            return "***@***.***";
         }
 
-        private void LoadData()
+        private string MaskPhone(string phone)
+        {
+            if (string.IsNullOrEmpty(phone)) return string.Empty;
+            if (phone.Length > 4)
+                return $"{phone.Substring(0, phone.Length - 4)}****";
+            return "****";
+        }
+
+
+        private async void LoadDataAsync()
         {
             try
             {
-                using (var dbContext = new AppDbContext())
-                {
-                    var list = dbContext.Customers
-                        .OrderBy(c => c.Name)
-                        .ToList();
+                var role = App.CurrentUser?.Role;
+                List<Customer> list = null;
 
-                    if (App.CurrentUser?.Role == UserRole.Staff)
+                await System.Threading.Tasks.Task.Run(() =>
+                {
+                    using (var dbContext = new AppDbContext())
                     {
-                        foreach (var c in list)
+                        list = dbContext.Customers.OrderBy(c => c.Name).ToList();
+
+                        if (role == UserRole.Staff)
                         {
-                            c.Email = MaskString(c.Email, true);
-                            c.Phone = MaskString(c.Phone, false);
-                            c.Address = "Hidden for security";
+                            foreach (var c in list)
+                            {
+                                c.Email = MaskEmail(c.Email);
+                                c.Phone = MaskPhone(c.Phone);
+                                c.Address = "Hidden for security";
+                            }
                         }
                     }
+                });
 
-                    _allItems = list;
-                }
+                _allItems = list;
                 UpdateFilters();
             }
             catch (Exception ex)
@@ -76,13 +81,17 @@ namespace FastAccountingSoftware.Views
             }
         }
 
+        public void PerformSearch(string query)
+        {
+            _searchQuery = query?.Trim().ToLower() ?? "";
+            UpdateFilters();
+        }
+
         private void UpdateFilters()
         {
-            if (_statusFilter == "All")
-            {
-                _filteredItems = _allItems;
-            }
-            else
+            var list = _allItems.AsEnumerable();
+
+            if (_statusFilter != "All")
             {
                 CustomerStatus targetStatus = _statusFilter switch
                 {
@@ -200,7 +209,7 @@ namespace FastAccountingSoftware.Views
                         dbContext.Customers.Add(dialog.NewCustomer);
                         dbContext.SaveChanges();
                     }
-                    LoadData();
+                    LoadDataAsync();
                 }
                 catch (Exception ex)
                 {
@@ -216,7 +225,7 @@ namespace FastAccountingSoftware.Views
             {
                 var win = new CustomerDetailWindow(customer) { Owner = Window.GetWindow(this) };
                 win.ShowDialog();
-                LoadData();
+                LoadDataAsync();
             }
         }
 
@@ -332,7 +341,7 @@ namespace FastAccountingSoftware.Views
                             db.Customers.Remove(customer);
                             db.SaveChanges();
                         }
-                        LoadData();
+                        LoadDataAsync();
                     }
                     catch (Exception ex)
                     {

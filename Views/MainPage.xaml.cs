@@ -57,8 +57,27 @@ namespace FastAccountingSoftware.Views
             UserInitialsText.Text = initials;
 
             // Set top bar initials (e.g. TA for Tunde Admin)
-            string roleInitial = _currentUser.Role == UserRole.Admin ? "A" : "S";
+            string roleInitial = _currentUser.Role == UserRole.Admin ? "A" : (_currentUser.Role == UserRole.Hr ? "H" : "S");
             TopBarInitialsText.Text = $"{initials}{roleInitial}";
+
+            ReloadModuleVisibility();
+
+            // Default route
+            NavDashboard.IsChecked = true;
+        }
+
+        public void ReloadModuleVisibility()
+        {
+            // Reset to defaults first
+            NavCustomers.Visibility = Visibility.Visible;
+            NavInvoices.Visibility = Visibility.Visible;
+            NavPos.Visibility = Visibility.Visible;
+            NavStaff.Visibility = Visibility.Visible;
+            NavPayroll.Visibility = Visibility.Visible;
+            NavSettings.Visibility = Visibility.Visible;
+            NavInventory.Visibility = Visibility.Visible;
+            NavIncome.Visibility = Visibility.Visible;
+            NavExpenses.Visibility = Visibility.Visible;
 
             // Apply role-based restrictions
             if (_currentUser.Role == UserRole.Staff)
@@ -66,6 +85,19 @@ namespace FastAccountingSoftware.Views
                 NavPayroll.Visibility = Visibility.Collapsed;
                 NavSettings.Visibility = Visibility.Collapsed;
                 NavStaff.Visibility = Visibility.Collapsed;
+            }
+            else if (_currentUser.Role == UserRole.Hr)
+            {
+                NavSettings.Visibility = Visibility.Collapsed;
+                NavCustomers.Visibility = Visibility.Collapsed;
+                NavInventory.Visibility = Visibility.Collapsed;
+                NavInvoices.Visibility = Visibility.Collapsed;
+                NavPos.Visibility = Visibility.Collapsed;
+                NavIncome.Visibility = Visibility.Collapsed;
+                NavExpenses.Visibility = Visibility.Collapsed;
+                
+                NavStaff.Visibility = Visibility.Visible;
+                NavPayroll.Visibility = Visibility.Visible;
             }
 
             // Apply Company Module Configuration overrides
@@ -80,26 +112,28 @@ namespace FastAccountingSoftware.Views
                         {
                             NavCustomers.Visibility = Visibility.Collapsed;
                         }
-                        else
-                        {
-                            NavCustomers.Visibility = _currentUser.Role == UserRole.Admin ? Visibility.Visible : Visibility.Visible;
-                        }
 
                         if (profile.DisablePos)
                         {
                             NavInvoices.Visibility = Visibility.Collapsed;
+                            NavPos.Visibility = Visibility.Collapsed;
                         }
-                        else
+
+                        if (profile.DisableHrms)
                         {
-                            NavInvoices.Visibility = Visibility.Visible;
+                            NavStaff.Visibility = Visibility.Collapsed;
+                            NavPayroll.Visibility = Visibility.Collapsed;
                         }
                     }
                 }
             }
             catch { }
 
-            // Default to Dashboard
-            NavDashboard.IsChecked = true;
+            // Toggle Headers based on children visibility
+            NavFinanceHeader.Visibility = (NavIncome.Visibility == Visibility.Visible || NavExpenses.Visibility == Visibility.Visible) ? Visibility.Visible : Visibility.Collapsed;
+            NavSalesCommerceHeader.Visibility = (NavCustomers.Visibility == Visibility.Visible || NavInvoices.Visibility == Visibility.Visible || NavPos.Visibility == Visibility.Visible || NavInventory.Visibility == Visibility.Visible) ? Visibility.Visible : Visibility.Collapsed;
+            NavHrmsHeader.Visibility = (NavStaff.Visibility == Visibility.Visible || NavPayroll.Visibility == Visibility.Visible) ? Visibility.Visible : Visibility.Collapsed;
+            NavSystemHeader.Visibility = (NavReports.Visibility == Visibility.Visible || NavSettings.Visibility == Visibility.Visible) ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void NavItem_Checked(object sender, RoutedEventArgs e)
@@ -127,6 +161,9 @@ namespace FastAccountingSoftware.Views
                     break;
                 case "Invoices":
                     contentPage = new InvoicesPage();
+                    break;
+                case "Pos":
+                    contentPage = new PosPage();
                     break;
                 case "Inventory":
                     contentPage = new InventoryPage();
@@ -214,6 +251,17 @@ namespace FastAccountingSoftware.Views
 
             // Navigate to ProfilePage
             ContentFrame.Navigate(new ProfilePage(_currentUser));
+        }
+
+        private void GlobalSearchBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (GlobalSearchBox == null || ContentFrame?.Content == null) return;
+            string query = GlobalSearchBox.Text;
+
+            if (ContentFrame.Content is ISearchablePage searchable)
+            {
+                searchable.PerformSearch(query);
+            }
         }
     }
 }

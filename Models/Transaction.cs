@@ -15,6 +15,8 @@ namespace FastAccountingSoftware.Models
         public string Description { get; set; } = string.Empty;
         public double Amount { get; set; }
         public TransactionType Type { get; set; }
+        public string? ImagePath { get; set; }
+        public string CustomAttributesJson { get; set; } = "{}";
 
         public string DateText => Date.ToString("d");
         public string AmountText => Amount.ToString("C");

@@ -17,21 +17,26 @@ namespace FastAccountingSoftware.Views
         public ExpensesPage()
         {
             InitializeComponent();
-            LoadData();
+            this.Loaded += (s, e) => LoadDataAsync();
         }
 
-        private void LoadData()
+        private async void LoadDataAsync()
         {
             try
             {
-                using (var dbContext = new AppDbContext())
+                List<Transaction> items = null;
+                await System.Threading.Tasks.Task.Run(() =>
                 {
-                    _allItems = dbContext.Transactions
-                        .Where(t => t.Type == TransactionType.Expense)
-                        .ToList()
-                        .OrderByDescending(t => t.Date)
-                        .ToList();
-                }
+                    using (var dbContext = new AppDbContext())
+                    {
+                        items = dbContext.Transactions
+                            .Where(t => t.Type == TransactionType.Expense)
+                            .ToList()
+                            .OrderByDescending(t => t.Date)
+                            .ToList();
+                    }
+                });
+                _allItems = items ?? new List<Transaction>();
                 _currentPage = 1;
                 ApplyPage();
             }
@@ -88,7 +93,7 @@ namespace FastAccountingSoftware.Views
                         dbContext.Transactions.Add(dialog.NewTransaction);
                         dbContext.SaveChanges();
                     }
-                    LoadData();
+                    LoadDataAsync();
                 }
                 catch (Exception ex)
                 {
@@ -103,7 +108,7 @@ namespace FastAccountingSoftware.Views
             {
                 var win = new TransactionDetailWindow(t) { Owner = Window.GetWindow(this) };
                 win.ShowDialog();
-                LoadData();
+                LoadDataAsync();
             }
         }
 

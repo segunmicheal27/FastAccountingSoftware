@@ -33,6 +33,7 @@
                         </ContextMenu>
                     </Button.ContextMenu>
                 </Button>
+                <Button Content="📥 Import Excel" Click="ImportExcel_Click" Background="#FF7A00" Foreground="White" Padding="14,8" Cursor="Hand" Margin="0,0,10,0"/>
                 <Button Content="+ New invoice" Click="NewInvoice_Click" Background="#1E293B" Foreground="#FF7A00" Padding="16,8" Cursor="Hand"/>
             </StackPanel>
         </Grid>

@@ -24,23 +24,43 @@ namespace FastAccountingSoftware.Views
             
             ChartCanvas.SizeChanged += (s, e) => RedrawChart();
             
-            LoadData();
+            this.Loaded += (s, e) => LoadDataAsync();
         }
 
-        private void LoadData()
+        private async void LoadDataAsync()
         {
             try
             {
-                using (var dbContext = new AppDbContext())
-                {
-                    // 1. Calculate dynamic statistics
-                    var incomesSum = dbContext.Transactions.Where(t => t.Type == TransactionType.Income).Sum(t => t.Amount);
-                    var expensesSum = dbContext.Transactions.Where(t => t.Type == TransactionType.Expense).Sum(t => t.Amount);
-                    double cashOnHand = incomesSum - expensesSum;
+                double incomesSum = 0;
+                double expensesSum = 0;
+                double outstandingInvoices = 0;
+                double grossPayroll = 0;
+                int activeStaff = 0;
+                List<Transaction> transactions = null;
+                List<Transaction> dbTransactions = null;
+                List<Customer> allCustomers = null;
 
-                    double outstandingInvoices = dbContext.Customers.Sum(c => c.Balance);
-                    double grossPayroll = dbContext.Staff.Sum(s => s.MonthlyPay);
-                    int activeStaff = dbContext.Staff.Count(s => s.Status == StaffStatus.Active);
+                await System.Threading.Tasks.Task.Run(() =>
+                {
+                    using var dbContext = new AppDbContext();
+                    incomesSum = dbContext.Transactions.Where(t => t.Type == TransactionType.Income).Sum(t => t.Amount);
+                    expensesSum = dbContext.Transactions.Where(t => t.Type == TransactionType.Expense).Sum(t => t.Amount);
+
+                    outstandingInvoices = dbContext.Customers.Sum(c => c.Balance);
+                    grossPayroll = dbContext.Staff.Sum(s => s.MonthlyPay);
+                    activeStaff = dbContext.Staff.Count(s => s.Status == StaffStatus.Active);
+
+                    transactions = dbContext.Transactions
+                        .ToList()
+                        .OrderByDescending(t => t.Date)
+                        .Take(4)
+                        .ToList();
+
+                    dbTransactions = dbContext.Transactions.ToList();
+                    allCustomers = dbContext.Customers.Where(c => c.Birthday != null).ToList();
+                });
+
+                double cashOnHand = incomesSum - expensesSum;
 
                     // Update UI text values
                     CashOnHandText.Text = $"₦{cashOnHand:N0}";
@@ -49,12 +69,6 @@ namespace FastAccountingSoftware.Views
                     ActiveStaffText.Text = activeStaff.ToString();
 
                     // 2. Load recent transactions (last 4, ordered descending by Date in-memory to prevent SQLite DateTimeOffset sort issue)
-                    var transactions = dbContext.Transactions
-                        .ToList()
-                        .OrderByDescending(t => t.Date)
-                        .Take(4)
-                        .ToList();
-
                     var listItems = new List<DashboardTransactionViewModel>();
                     foreach (var t in transactions)
                     {
@@ -111,7 +125,6 @@ namespace FastAccountingSoftware.Views
                         .Reverse()
                         .ToList();
 
-                    var dbTransactions = dbContext.Transactions.ToList();
                     var monthlyRevenues = new List<double>();
                     var monthlyExpenses = new List<double>();
 
@@ -148,8 +161,7 @@ namespace FastAccountingSoftware.Views
 
                     RedrawChart();
 
-                    LoadBirthdays(dbContext);
-                }
+                    LoadBirthdays(allCustomers);
             }
             catch (Exception ex)
             {
@@ -183,7 +195,7 @@ namespace FastAccountingSoftware.Views
 
                         dbContext.SaveChanges();
                     }
-                    LoadData();
+                    LoadDataAsync();
                 }
                 catch (Exception ex)
                 {
@@ -215,7 +227,7 @@ namespace FastAccountingSoftware.Views
                         {
                             var win = new TransactionDetailWindow(t) { Owner = Window.GetWindow(this) };
                             win.ShowDialog();
-                            LoadData();
+                            LoadDataAsync();
                         }
                     }
                 }
@@ -247,12 +259,11 @@ namespace FastAccountingSoftware.Views
             }
         }
 
-        private void LoadBirthdays(AppDbContext db)
+        private void LoadBirthdays(List<Customer> allCustomers)
         {
             try
             {
                 var today = DateTime.Today;
-                var allCustomers = db.Customers.Where(c => c.Birthday != null).ToList();
 
                 if (App.CurrentUser?.Role == UserRole.Staff)
                 {

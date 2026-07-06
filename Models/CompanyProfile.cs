@@ -9,6 +9,7 @@ namespace FastAccountingSoftware.Models
         public string BirthdayTemplate { get; set; } = "Happy Birthday to our valued customer, {Name}! Wishing you a wonderful year ahead from all of us at Fast Accounting.";
         public bool DisableCms { get; set; } = false;
         public bool DisablePos { get; set; } = false;
+        public bool DisableHrms { get; set; } = false;
         public bool IsPremium { get; set; } = true; // Set to true by default for premium builds
     }
 }

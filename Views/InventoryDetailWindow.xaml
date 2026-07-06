@@ -87,6 +87,14 @@
                             </StackPanel>
                         </StackPanel>
                     </Border>
+
+                    <!-- Dynamic Attributes Header & Container -->
+                    <StackPanel x:Name="DynamicAttributesSection" Visibility="Collapsed" Margin="0,16,0,0">
+                        <TextBlock Text="CUSTOM SPREADSHEET COLUMNS" FontSize="10" FontWeight="Bold" Foreground="#94A3B8" Margin="0,0,0,8"/>
+                        <StackPanel x:Name="DynamicAttributesContainer">
+                            <!-- Populated dynamically -->
+                        </StackPanel>
+                    </StackPanel>
                 </StackPanel>
             </ScrollViewer>
 

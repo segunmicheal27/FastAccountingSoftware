@@ -82,87 +82,97 @@
                     <Border.Effect>
                         <DropShadowEffect BlurRadius="8" ShadowDepth="1" Color="#000000" Opacity="0.1"/>
                     </Border.Effect>
-                    <TextBlock x:Name="SidebarCompanyAbbrText" Text="BC" Foreground="#E53935" FontWeight="Bold" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock x:Name="SidebarCompanyAbbrText" Text="" Foreground="#E53935" FontWeight="Bold" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
-                <TextBlock x:Name="SidebarCompanyText" Text="Books &amp; Co" Foreground="#ffffff" FontWeight="Bold" FontSize="16" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                <TextBlock x:Name="SidebarCompanyText" Text="" Foreground="#ffffff" FontWeight="Bold" FontSize="16" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
             </StackPanel>
 
             <!-- Navigation Items -->
-            <StackPanel Grid.Row="1">
-                
-                <TextBlock Text="OVERVIEW" Style="{StaticResource NavHeaderStyle}" />
-                <RadioButton x:Name="NavDashboard" Style="{StaticResource NavButtonStyle}" Tag="Dashboard" Checked="NavItem_Checked">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="&#xE80F;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Width="24" />
-                        <TextBlock Text="Dashboard" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" Margin="8,0,0,0" />
-                    </StackPanel>
-                </RadioButton>
+            <Viewbox Grid.Row="1" Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <StackPanel>
+                    
+                    <TextBlock Text="OVERVIEW" Style="{StaticResource NavHeaderStyle}" />
+                    <RadioButton x:Name="NavDashboard" Style="{StaticResource NavButtonStyle}" Tag="Dashboard" Checked="NavItem_Checked">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE80F;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Width="24" />
+                            <TextBlock Text="Dashboard" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" Margin="8,0,0,0" />
+                        </StackPanel>
+                    </RadioButton>
 
-                <TextBlock Text="MANAGE" Style="{StaticResource NavHeaderStyle}" />
-                <RadioButton x:Name="NavIncome" Style="{StaticResource NavButtonStyle}" Tag="Income" Checked="NavItem_Checked">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="&#xE825;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Width="24" />
-                        <TextBlock Text="Income" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" Margin="8,0,0,0" />
-                    </StackPanel>
-                </RadioButton>
-                
-                <RadioButton x:Name="NavExpenses" Style="{StaticResource NavButtonStyle}" Tag="Expenses" Checked="NavItem_Checked">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="&#xE826;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Width="24" />
-                        <TextBlock Text="Expenses" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" Margin="8,0,0,0" />
-                    </StackPanel>
-                </RadioButton>
-                
-                <RadioButton x:Name="NavCustomers" Style="{StaticResource NavButtonStyle}" Tag="Customers" Checked="NavItem_Checked">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="&#xE716;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Width="24" />
-                        <TextBlock Text="Customers" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" Margin="8,0,0,0" />
-                    </StackPanel>
-                </RadioButton>
-                
-                <RadioButton x:Name="NavStaff" Style="{StaticResource NavButtonStyle}" Tag="Staff" Checked="NavItem_Checked">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="&#xE77B;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Width="24" />
-                        <TextBlock Text="Staff" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" Margin="8,0,0,0" />
-                    </StackPanel>
-                </RadioButton>
-                
-                <RadioButton x:Name="NavPayroll" Style="{StaticResource NavButtonStyle}" Tag="Payroll" Checked="NavItem_Checked">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="&#xE8C0;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Width="24" />
-                        <TextBlock Text="Payroll" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" Margin="8,0,0,0" />
-                    </StackPanel>
-                </RadioButton>
-                
-                <RadioButton x:Name="NavInvoices" Style="{StaticResource NavButtonStyle}" Tag="Invoices" Checked="NavItem_Checked">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="&#xE8A5;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Width="24" />
-                        <TextBlock Text="Invoices" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" Margin="8,0,0,0" />
-                    </StackPanel>
-                </RadioButton>
+                    <TextBlock x:Name="NavFinanceHeader" Text="FINANCE" Style="{StaticResource NavHeaderStyle}" />
+                    <RadioButton x:Name="NavIncome" Style="{StaticResource NavButtonStyle}" Tag="Income" Checked="NavItem_Checked">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE825;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Width="24" />
+                            <TextBlock Text="Income" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" Margin="8,0,0,0" />
+                        </StackPanel>
+                    </RadioButton>
+                    
+                    <RadioButton x:Name="NavExpenses" Style="{StaticResource NavButtonStyle}" Tag="Expenses" Checked="NavItem_Checked">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE826;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Width="24" />
+                            <TextBlock Text="Expenses" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" Margin="8,0,0,0" />
+                        </StackPanel>
+                    </RadioButton>
 
-                <RadioButton x:Name="NavInventory" Style="{StaticResource NavButtonStyle}" Tag="Inventory" Checked="NavItem_Checked">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="&#xE7B8;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Width="24" />
-                        <TextBlock Text="Inventory" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" Margin="8,0,0,0" />
-                    </StackPanel>
-                </RadioButton>
-                
-                <RadioButton x:Name="NavReports" Style="{StaticResource NavButtonStyle}" Tag="Reports" Checked="NavItem_Checked">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="&#xE9F9;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Width="24" />
-                        <TextBlock Text="Reports" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" Margin="8,0,0,0" />
-                    </StackPanel>
-                </RadioButton>
+                    <TextBlock x:Name="NavSalesCommerceHeader" Text="SALES &amp; COMMERCE" Style="{StaticResource NavHeaderStyle}" />
+                    <RadioButton x:Name="NavCustomers" Style="{StaticResource NavButtonStyle}" Tag="Customers" Checked="NavItem_Checked">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE716;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Width="24" />
+                            <TextBlock Text="Customers" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" Margin="8,0,0,0" />
+                        </StackPanel>
+                    </RadioButton>
 
-                <TextBlock Text="SYSTEM" Style="{StaticResource NavHeaderStyle}" x:Name="NavSystemHeader" />
-                <RadioButton x:Name="NavSettings" Style="{StaticResource NavButtonStyle}" Tag="Settings" Checked="NavItem_Checked">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="&#xE713;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Width="24" />
-                        <TextBlock Text="Settings" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" Margin="8,0,0,0" />
-                    </StackPanel>
-                </RadioButton>
-            </StackPanel>
+                    <RadioButton x:Name="NavInvoices" Style="{StaticResource NavButtonStyle}" Tag="Invoices" Checked="NavItem_Checked">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE8A5;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Width="24" />
+                            <TextBlock Text="Invoices" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" Margin="8,0,0,0" />
+                        </StackPanel>
+                    </RadioButton>
+
+                    <RadioButton x:Name="NavPos" Style="{StaticResource NavButtonStyle}" Tag="Pos" Checked="NavItem_Checked">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE116;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Width="24" />
+                            <TextBlock Text="POS Checkout" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" Margin="8,0,0,0" />
+                        </StackPanel>
+                    </RadioButton>
+
+                    <RadioButton x:Name="NavInventory" Style="{StaticResource NavButtonStyle}" Tag="Inventory" Checked="NavItem_Checked">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE7B8;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Width="24" />
+                            <TextBlock Text="Inventory" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" Margin="8,0,0,0" />
+                        </StackPanel>
+                    </RadioButton>
+
+                    <TextBlock x:Name="NavHrmsHeader" Text="HRMS" Style="{StaticResource NavHeaderStyle}" />
+                    <RadioButton x:Name="NavStaff" Style="{StaticResource NavButtonStyle}" Tag="Staff" Checked="NavItem_Checked">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE77B;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Width="24" />
+                            <TextBlock Text="Staff" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" Margin="8,0,0,0" />
+                        </StackPanel>
+                    </RadioButton>
+                    
+                    <RadioButton x:Name="NavPayroll" Style="{StaticResource NavButtonStyle}" Tag="Payroll" Checked="NavItem_Checked">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE8C0;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Width="24" />
+                            <TextBlock Text="Payroll" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" Margin="8,0,0,0" />
+                        </StackPanel>
+                    </RadioButton>
+
+                    <TextBlock x:Name="NavSystemHeader" Text="SYSTEM" Style="{StaticResource NavHeaderStyle}" />
+                    <RadioButton x:Name="NavReports" Style="{StaticResource NavButtonStyle}" Tag="Reports" Checked="NavItem_Checked">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE9F9;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Width="24" />
+                            <TextBlock Text="Reports" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" Margin="8,0,0,0" />
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton x:Name="NavSettings" Style="{StaticResource NavButtonStyle}" Tag="Settings" Checked="NavItem_Checked">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE713;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center" Width="24" />
+                            <TextBlock Text="Settings" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" Margin="8,0,0,0" />
+                        </StackPanel>
+                    </RadioButton>
+                </StackPanel>
+            </Viewbox>
 
             <!-- Footer: Sleek AI Assistant button and user details with initials avatar -->
             <StackPanel Grid.Row="2">
@@ -212,9 +222,9 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <!-- Breadcrumbs (e.g. Books & Co / Dashboard) -->
+                    <!-- Breadcrumbs (e.g. Dashboard) -->
                     <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock x:Name="CompanyBreadcrumbText" Text="Books &amp; Co" FontSize="14" Foreground="#64748B" FontWeight="Medium" />
+                        <TextBlock x:Name="CompanyBreadcrumbText" Text="" FontSize="14" Foreground="#64748B" FontWeight="Medium" />
                         <TextBlock Text=" / " FontSize="14" Foreground="#94A3B8" />
                         <TextBlock x:Name="CurrentPageTitleText" Text="Dashboard" FontSize="14" Foreground="#1E293B" FontWeight="Bold" />
                     </StackPanel>
@@ -229,9 +239,10 @@
                             <!-- Search Icon (magnifying glass) -->
                             <TextBlock Grid.Column="0" Text="&#xE721;" FontFamily="Segoe MDL2 Assets" FontSize="14" Foreground="#94A3B8" VerticalAlignment="Center" Margin="0,0,10,0" />
                             <!-- Search Textbox -->
-                            <TextBox Grid.Column="1" BorderThickness="0" Background="Transparent" VerticalAlignment="Center" VerticalContentAlignment="Center"
+                            <TextBox x:Name="GlobalSearchBox" Grid.Column="1" BorderThickness="0" Background="Transparent" VerticalAlignment="Center" VerticalContentAlignment="Center"
                                      FontSize="13" Foreground="#1E293B" CaretBrush="#1E293B"
-                                     md:HintAssist.Hint="Search customers, invoices, staff..." md:TextFieldAssist.DecorationVisibility="Collapsed" />
+                                     md:HintAssist.Hint="Search products, invoices, staff..." md:TextFieldAssist.DecorationVisibility="Collapsed" 
+                                     TextChanged="GlobalSearchBox_TextChanged" />
                         </Grid>
                     </Border>
 

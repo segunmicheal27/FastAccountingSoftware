@@ -195,7 +195,8 @@
                         <TextBlock Text="Module Customizations" FontWeight="Bold" FontSize="13" Foreground="#475569" Margin="0,0,0,10"/>
                         <StackPanel Margin="0,0,0,24">
                             <CheckBox x:Name="DisableCmsCheck" Content="Disable Customer Management System (CMS)" FontSize="13" Foreground="#1E293B" Margin="0,0,0,10" FontWeight="SemiBold"/>
-                            <CheckBox x:Name="DisablePosCheck" Content="Disable Point of Sale (POS) Module" FontSize="13" Foreground="#1E293B" Margin="0,0,0,0" FontWeight="SemiBold"/>
+                            <CheckBox x:Name="DisablePosCheck" Content="Disable Point of Sale (POS) Module" FontSize="13" Foreground="#1E293B" Margin="0,0,0,10" FontWeight="SemiBold"/>
+                            <CheckBox x:Name="DisableHrmsCheck" Content="Disable Human Resource Management System (HRMS)" FontSize="13" Foreground="#1E293B" Margin="0,0,0,0" FontWeight="SemiBold"/>
                         </StackPanel>
 
                         <Button Content="Save Financial Settings" Click="SavePreferences_Click" Background="#FF7A00" Foreground="White" HorizontalAlignment="Left"/>

@@ -10,6 +10,8 @@ namespace FastAccountingSoftware.Models
         public double CostPrice { get; set; }
         public double SellingPrice { get; set; }
         public int ReorderLevel { get; set; }
+        public string? ImagePath { get; set; }
+        public string CustomAttributesJson { get; set; } = "{}";
 
         // UI Helpers
         public string CostPriceText => $"₦{CostPrice:N0}";

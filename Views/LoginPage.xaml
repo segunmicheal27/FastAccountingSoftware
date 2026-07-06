@@ -151,49 +151,6 @@
                     <TextBlock Text="Welcome back!" FontSize="28" FontWeight="Bold" Foreground="#1E293B" HorizontalAlignment="Center"/>
                     <TextBlock Text="Please sign in to your account" FontSize="14" Foreground="#888888" HorizontalAlignment="Center" Margin="0,6,0,24"/>
                     
-                    <!-- Role Selector (Custom toggle cards) -->
-                    <Grid Margin="0,0,0,24">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="16" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        
-                        <!-- Staff Tab -->
-                        <Border x:Name="StaffBorder" Grid.Column="0" BorderBrush="#FF6B37" BorderThickness="1.5" Background="#FFF5F0" CornerRadius="8" Padding="14" MouseLeftButtonDown="RoleBorder_Tapped" Tag="Staff" Cursor="Hand">
-                            <StackPanel HorizontalAlignment="Center">
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,6">
-                                    <TextBlock Text="&#xE77B;" FontFamily="Segoe MDL2 Assets" FontSize="16" Foreground="#F44336" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Staff" FontWeight="Bold" Foreground="#1E293B" FontSize="15" Margin="8,0,0,0" VerticalAlignment="Center"/>
-                                </StackPanel>
-                                <TextBlock Text="Access staff features" FontSize="11" Foreground="#888888" HorizontalAlignment="Center"/>
-                            </StackPanel>
-                        </Border>
-                        
-                        <!-- Admin Tab -->
-                        <Border x:Name="AdminBorder" Grid.Column="2" BorderBrush="#FFD6CF" BorderThickness="1" Background="White" CornerRadius="8" Padding="14" MouseLeftButtonDown="RoleBorder_Tapped" Tag="Admin" Cursor="Hand">
-                            <StackPanel HorizontalAlignment="Center">
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,6">
-                                    <TextBlock Text="&#xEA18;" FontFamily="Segoe MDL2 Assets" FontSize="16" Foreground="#555555" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Admin" FontWeight="Bold" Foreground="#1E293B" FontSize="15" Margin="8,0,0,0" VerticalAlignment="Center"/>
-                                </StackPanel>
-                                <TextBlock Text="Access admin panel" FontSize="11" Foreground="#888888" HorizontalAlignment="Center"/>
-                            </StackPanel>
-                        </Border>
-                    </Grid>
-                    
-                    <!-- Divider -->
-                    <Grid Margin="0,0,0,20">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Rectangle Grid.Column="0" Height="1" Fill="#EAEAEA" VerticalAlignment="Center"/>
-                        <TextBlock Grid.Column="1" Text="OR" FontSize="12" Foreground="#CCCCCC" Margin="18,0,18,0" FontWeight="Bold"/>
-                        <Rectangle Grid.Column="2" Height="1" Fill="#EAEAEA" VerticalAlignment="Center"/>
-                    </Grid>
-                    
                     <!-- Email Field (Rounded CornerRadius=8, Height=50, icon left) -->
                     <TextBlock Text="Email" FontWeight="Bold" FontSize="13" Foreground="#475569" Margin="0,0,0,8"/>
                     <Border Background="White" BorderBrush="#E2E8F0" BorderThickness="1.5" CornerRadius="8" Height="50" Margin="0,0,0,20">

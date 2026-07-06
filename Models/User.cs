@@ -13,6 +13,7 @@ namespace FastAccountingSoftware.Models
     public enum UserRole
     {
         Admin,
-        Staff
+        Staff,
+        Hr
     }
 }

@@ -7,31 +7,37 @@ using System;
 
 namespace FastAccountingSoftware.Views
 {
-    public sealed partial class StaffPage : Page
+    public sealed partial class StaffPage : Page, ISearchablePage
     {
         private const int PageSize = 10;
         private int _currentPage = 1;
         private int _totalPages = 1;
         private List<StaffMember> _allItems = new List<StaffMember>();
+        private List<StaffMember> _filteredItems = new List<StaffMember>();
+        private string _searchQuery = "";
 
         public StaffPage()
         {
             this.InitializeComponent();
-            LoadData();
+            this.Loaded += (s, e) => LoadDataAsync();
         }
 
-        private void LoadData()
+        private async void LoadDataAsync()
         {
             try
             {
-                using (var dbContext = new AppDbContext())
+                List<StaffMember> items = null;
+                await System.Threading.Tasks.Task.Run(() =>
                 {
-                    _allItems = dbContext.Staff
-                        .OrderBy(s => s.Name)
-                        .ToList();
-                }
-                _currentPage = 1;
-                ApplyPage();
+                    using (var dbContext = new AppDbContext())
+                    {
+                        items = dbContext.Staff
+                            .OrderBy(s => s.Name)
+                            .ToList();
+                    }
+                });
+                _allItems = items ?? new List<StaffMember>();
+                ApplySearch();
             }
             catch (Exception ex)
             {
@@ -39,12 +45,35 @@ namespace FastAccountingSoftware.Views
             }
         }
 
+        public void PerformSearch(string query)
+        {
+            _searchQuery = query?.Trim().ToLower() ?? "";
+            ApplySearch();
+        }
+
+        private void ApplySearch()
+        {
+            if (string.IsNullOrEmpty(_searchQuery))
+            {
+                _filteredItems = _allItems.ToList();
+            }
+            else
+            {
+                _filteredItems = _allItems.Where(s => 
+                    (s.Name?.ToLower() ?? "").Contains(_searchQuery) ||
+                    (s.Department?.ToLower() ?? "").Contains(_searchQuery) ||
+                    (s.Role?.ToLower() ?? "").Contains(_searchQuery)).ToList();
+            }
+            _currentPage = 1;
+            ApplyPage();
+        }
+
         private void ApplyPage()
         {
-            _totalPages = Math.Max(1, (int)Math.Ceiling(_allItems.Count / (double)PageSize));
+            _totalPages = Math.Max(1, (int)Math.Ceiling(_filteredItems.Count / (double)PageSize));
             _currentPage = Math.Max(1, Math.Min(_currentPage, _totalPages));
 
-            var pageItems = _allItems
+            var pageItems = _filteredItems
                 .Skip((_currentPage - 1) * PageSize)
                 .Take(PageSize)
                 .ToList();
@@ -105,7 +134,7 @@ namespace FastAccountingSoftware.Views
 
                         dbContext.SaveChanges();
                     }
-                    LoadData();
+                    LoadDataAsync();
                 }
                 catch (Exception ex)
                 {
@@ -121,7 +150,7 @@ namespace FastAccountingSoftware.Views
             {
                 var win = new StaffDetailWindow(staff) { Owner = Window.GetWindow(this) };
                 win.ShowDialog();
-                LoadData();
+                LoadDataAsync();
             }
         }
 

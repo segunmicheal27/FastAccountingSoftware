@@ -10,7 +10,7 @@ DefaultGroupName=FastAccountingSoftware
 AllowNoIcons=yes
 LicenseFile=LICENSE
 OutputDir=Installer
-OutputBaseFilename=FastAccountingSoftware-Setup-v1.0.0
+OutputBaseFilename=FastAccountingSoftware-v1.0.0-Premium-Setup
 SetupIconFile=Assets\WindowIcon.ico
 Compression=lzma
 SolidCompression=yes
@@ -28,7 +28,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 ; Main application files from Release build
-Source: "bin\Release\net8.0-windows\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "bin\Release\net8.0-windows10.0.19041.0\win-x64\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
 Name: "{group}\FastAccountingSoftware"; Filename: "{app}\FastAccountingSoftware.exe"

@@ -39,6 +39,15 @@
                     </Button.ContextMenu>
                 </Button>
 
+                <!-- Import Excel Button -->
+                <Button Click="ImportExcel_Click" Height="42" Padding="18,0" 
+                        Background="#FF7A00" Foreground="White" BorderThickness="0" Margin="0,0,12,0" Cursor="Hand">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="📥" FontSize="14" Foreground="White" VerticalAlignment="Center"/>
+                        <TextBlock Text="Import Excel" FontSize="14" FontWeight="Bold" Foreground="White" Margin="6,0,0,0" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+
                 <!-- New Product Button -->
                 <Button Click="NewProduct_Click" Height="42" Padding="20,0" 
                         Background="#1B2A1C" Foreground="White" BorderThickness="0" Cursor="Hand">
@@ -97,6 +106,7 @@
                     <!-- Table Headers -->
                     <Grid Grid.Row="0" Margin="12,0,12,8">
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="60"/> <!-- Image Column -->
                             <ColumnDefinition Width="2.5*"/>
                             <ColumnDefinition Width="1*"/>
                             <ColumnDefinition Width="1*"/>
@@ -106,13 +116,14 @@
                             <ColumnDefinition Width="1.8*"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Grid.Column="0" Text="PRODUCT NAME" FontSize="11" FontWeight="Bold" Foreground="#94A3B8"/>
-                        <TextBlock Grid.Column="1" Text="QTY IN STOCK" FontSize="11" FontWeight="Bold" Foreground="#94A3B8"/>
-                        <TextBlock Grid.Column="2" Text="COST PRICE" FontSize="11" FontWeight="Bold" Foreground="#94A3B8"/>
-                        <TextBlock Grid.Column="3" Text="SELLING PRICE" FontSize="11" FontWeight="Bold" Foreground="#94A3B8"/>
-                        <TextBlock Grid.Column="4" Text="REORDER LVL" FontSize="11" FontWeight="Bold" Foreground="#94A3B8"/>
-                        <TextBlock Grid.Column="5" Text="STATUS" FontSize="11" FontWeight="Bold" Foreground="#94A3B8"/>
-                        <TextBlock Grid.Column="6" Text="ACTIONS" FontSize="11" FontWeight="Bold" Foreground="#94A3B8" HorizontalAlignment="Right"/>
+                        <TextBlock Grid.Column="0" Text="IMG" FontSize="11" FontWeight="Bold" Foreground="#94A3B8"/>
+                        <TextBlock Grid.Column="1" Text="PRODUCT NAME" FontSize="11" FontWeight="Bold" Foreground="#94A3B8"/>
+                        <TextBlock Grid.Column="2" Text="QTY IN STOCK" FontSize="11" FontWeight="Bold" Foreground="#94A3B8"/>
+                        <TextBlock Grid.Column="3" Text="COST PRICE" FontSize="11" FontWeight="Bold" Foreground="#94A3B8"/>
+                        <TextBlock Grid.Column="4" Text="SELLING PRICE" FontSize="11" FontWeight="Bold" Foreground="#94A3B8"/>
+                        <TextBlock Grid.Column="5" Text="REORDER LVL" FontSize="11" FontWeight="Bold" Foreground="#94A3B8"/>
+                        <TextBlock Grid.Column="6" Text="STATUS" FontSize="11" FontWeight="Bold" Foreground="#94A3B8"/>
+                        <TextBlock Grid.Column="7" Text="ACTIONS" FontSize="11" FontWeight="Bold" Foreground="#94A3B8" HorizontalAlignment="Right"/>
                     </Grid>
                     
                     <Rectangle Grid.Row="0" Height="1" Fill="#E2E8F0" VerticalAlignment="Bottom"/>
@@ -125,6 +136,7 @@
                                     <StackPanel>
                                         <Grid Margin="12,4" Background="Transparent" Cursor="Hand" Tag="{Binding}" MouseLeftButtonUp="ProductRow_Click">
                                             <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="60"/>
                                                 <ColumnDefinition Width="2.5*"/>
                                                 <ColumnDefinition Width="1*"/>
                                                 <ColumnDefinition Width="1*"/>
@@ -134,28 +146,34 @@
                                                 <ColumnDefinition Width="1.8*"/>
                                             </Grid.ColumnDefinitions>
 
+                                            <!-- Image -->
+                                            <Border Grid.Column="0" Width="40" Height="40" CornerRadius="8" Background="#F1F5F9" ClipToBounds="True" HorizontalAlignment="Left">
+                                                <Image Source="{Binding ImagePath, TargetNullValue='/FastAccountingSoftware;component/Assets/placeholder.png', FallbackValue='/FastAccountingSoftware;component/Assets/placeholder.png'}" Stretch="UniformToFill"/>
+                                            </Border>
+
                                             <!-- Product Title -->
-                                            <TextBlock Grid.Column="0" Text="{Binding Name}" Foreground="#1E293B" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                            <TextBlock Grid.Column="1" Text="{Binding Name}" Foreground="#1E293B" FontWeight="SemiBold" VerticalAlignment="Center"/>
                                             
                                             <!-- Qty -->
-                                            <TextBlock Grid.Column="1" Text="{Binding Quantity}" Foreground="#1E293B" VerticalAlignment="Center"/>
+                                            <TextBlock Grid.Column="2" Text="{Binding Quantity}" Foreground="#1E293B" VerticalAlignment="Center"/>
                                             
                                             <!-- Cost Price -->
-                                            <TextBlock Grid.Column="2" Text="{Binding CostPriceText}" Foreground="#555555" VerticalAlignment="Center"/>
+                                            <TextBlock Grid.Column="3" Text="{Binding CostPriceText}" Foreground="#555555" VerticalAlignment="Center"/>
                                             
                                             <!-- Selling Price -->
-                                            <TextBlock Grid.Column="3" Text="{Binding SellingPriceText}" Foreground="#1E293B" FontWeight="Bold" VerticalAlignment="Center"/>
+                                            <TextBlock Grid.Column="4" Text="{Binding SellingPriceText}" Foreground="#1E293B" FontWeight="Bold" VerticalAlignment="Center"/>
                                             
                                             <!-- Reorder Level -->
-                                            <TextBlock Grid.Column="4" Text="{Binding ReorderLevel}" Foreground="#555555" VerticalAlignment="Center"/>
+                                            <TextBlock Grid.Column="5" Text="{Binding ReorderLevel}" Foreground="#555555" VerticalAlignment="Center"/>
                                             
                                             <!-- Stock Status Badge -->
-                                            <Border Grid.Column="5" Background="{Binding StatusBg}" CornerRadius="12" Padding="8,4" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                            <Border Grid.Column="6" Background="{Binding StatusBg}" CornerRadius="12" Padding="8,4" HorizontalAlignment="Left" VerticalAlignment="Center">
                                                 <TextBlock Text="{Binding StockStatus}" Foreground="{Binding StatusFg}" FontSize="11" FontWeight="Bold"/>
                                             </Border>
 
                                             <!-- Action Buttons -->
-                                            <StackPanel Grid.Column="6" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                            <StackPanel Grid.Column="7" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                                <Button Content="👁 View" Click="ViewProduct_Click" Tag="{Binding}" FontSize="11" Padding="6,3" Margin="0,0,4,0" Background="#E8F4F8" Foreground="#0277BD" BorderBrush="#B3E5FC" BorderThickness="1" Cursor="Hand"/>
                                                 <Button Content="⚡ Restock" Click="QuickRestock_Click" Tag="{Binding}" FontSize="11" Padding="6,3" Margin="0,0,4,0" Background="#E8F5E9" Foreground="#2E7D32" BorderBrush="#A5D6A7" BorderThickness="1" Cursor="Hand"/>
                                                 <Button Content="✎ Edit" Click="EditProduct_Click" Tag="{Binding}" FontSize="11" Padding="6,3" Margin="0,0,4,0" Background="#FAF6F0" Foreground="#1E293B" BorderBrush="#E5E1D6" BorderThickness="1" Cursor="Hand"/>
                                                 <Button Content="🗑 Del" Click="DeleteProduct_Click" Tag="{Binding}" FontSize="11" Padding="6,3" Background="#FFF5F5" Foreground="#C92A2A" BorderBrush="#FFC9C9" BorderThickness="1" Cursor="Hand"/>

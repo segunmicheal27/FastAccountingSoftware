@@ -14,6 +14,7 @@ namespace FastAccountingSoftware.Models
         public DbSet<CompanyProfile> CompanyProfiles { get; set; }
         public DbSet<HmoProvider> HmoProviders { get; set; }
         public DbSet<InventoryItem> InventoryItems { get; set; }
+        public DbSet<ImportTemplate> ImportTemplates { get; set; }
 
         public AppDbContext()
         {

@@ -17,38 +17,46 @@ namespace FastAccountingSoftware.Views
         public PayrollPage()
         {
             this.InitializeComponent();
-            LoadData();
+            this.Loaded += (s, e) => LoadDataAsync();
         }
 
-        private void LoadData()
+        private async void LoadDataAsync()
         {
             try
             {
-                using (var dbContext = new AppDbContext())
+                int staffCount = 0;
+                double grossPayroll = 0;
+                double deductions = 0;
+                double netPayable = 0;
+                List<PayrollRun> items = null;
+
+                await System.Threading.Tasks.Task.Run(() =>
                 {
-                    // 1. Calculate current cycle stats
-                    var activeStaff = dbContext.Staff.Where(s => s.Status == StaffStatus.Active).ToList();
-                    int staffCount = activeStaff.Count;
-                    double grossPayroll = activeStaff.Sum(s => s.MonthlyPay);
-                    double deductions = grossPayroll * 0.15; // 15% deductions
-                    double netPayable = grossPayroll - deductions;
+                    using (var dbContext = new AppDbContext())
+                    {
+                        var activeStaff = dbContext.Staff.Where(s => s.Status == StaffStatus.Active).ToList();
+                        staffCount = activeStaff.Count;
+                        grossPayroll = activeStaff.Sum(s => s.MonthlyPay);
+                        deductions = grossPayroll * 0.15;
+                        netPayable = grossPayroll - deductions;
 
-                    // Update UI text values
-                    GrossPayrollValueText.Text = $"₦{grossPayroll:N0}";
-                    DeductionsValueText.Text = $"₦{deductions:N0}";
-                    NetPayableValueText.Text = $"₦{netPayable:N0}";
-                    
-                    StaffCount1Text.Text = $"{staffCount} staff active";
-                    
-                    string nextMonthName = DateTime.Now.ToString("MMMM yyyy");
-                    HeaderSubtitleText.Text = $"Next cycle: {nextMonthName} — ₦{grossPayroll:N1}M across {staffCount} staff.";
+                        items = dbContext.PayrollRuns
+                            .ToList()
+                            .OrderByDescending(r => r.Date)
+                            .ToList();
+                    }
+                });
 
-                    // 2. Load payroll history (ordered by date descending)
-                    _allItems = dbContext.PayrollRuns
-                        .ToList()
-                        .OrderByDescending(r => r.Date)
-                        .ToList();
-                }
+                GrossPayrollValueText.Text = $"₦{grossPayroll:N0}";
+                DeductionsValueText.Text = $"₦{deductions:N0}";
+                NetPayableValueText.Text = $"₦{netPayable:N0}";
+                
+                StaffCount1Text.Text = $"{staffCount} staff active";
+                
+                string nextMonthName = DateTime.Now.ToString("MMMM yyyy");
+                HeaderSubtitleText.Text = $"Next cycle: {nextMonthName} — ₦{grossPayroll:N1}M across {staffCount} staff.";
+
+                _allItems = items ?? new List<PayrollRun>();
                 _currentPage = 1;
                 ApplyPage();
             }
@@ -155,7 +163,7 @@ namespace FastAccountingSoftware.Views
                     
                     CustomMessageBox.Show($"Payroll processed successfully for {currentMonthName}!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                     
-                    LoadData();
+                    LoadDataAsync();
                 }
             }
             catch (Exception ex)

@@ -7,46 +7,74 @@ using System;
 
 namespace FastAccountingSoftware.Views
 {
-    public partial class IncomePage : Page
+    public partial class IncomePage : Page, ISearchablePage
     {
         private const int PageSize = 10;
         private int _currentPage = 1;
         private int _totalPages = 1;
         private List<Transaction> _allItems = new List<Transaction>();
+        private List<Transaction> _filteredItems = new List<Transaction>();
+        private string _searchQuery = "";
 
         public IncomePage()
         {
             InitializeComponent();
-            LoadData();
+            this.Loaded += (s, e) => LoadDataAsync();
         }
 
-        private void LoadData()
+        private async void LoadDataAsync()
         {
             try
             {
-                using (var dbContext = new AppDbContext())
+                List<Transaction> items = null;
+                await System.Threading.Tasks.Task.Run(() =>
                 {
-                    _allItems = dbContext.Transactions
-                        .Where(t => t.Type == TransactionType.Income)
-                        .ToList()
-                        .OrderByDescending(t => t.Date)
-                        .ToList();
-                }
-                _currentPage = 1;
-                ApplyPage();
+                    using (var dbContext = new AppDbContext())
+                    {
+                        items = dbContext.Transactions
+                            .Where(t => t.Type == TransactionType.Income)
+                            .ToList()
+                            .OrderByDescending(t => t.Date)
+                            .ToList();
+                    }
+                });
+                _allItems = items ?? new List<Transaction>();
+                ApplySearch();
             }
             catch (Exception ex)
             {
-                CustomMessageBox.Show($"Error loading income data: {ex.Message}", "Database Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                CustomMessageBox.Show($"Error loading income: {ex.Message}", "Database Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        public void PerformSearch(string query)
+        {
+            _searchQuery = query?.Trim().ToLower() ?? "";
+            ApplySearch();
+        }
+
+        private void ApplySearch()
+        {
+            if (string.IsNullOrEmpty(_searchQuery))
+            {
+                _filteredItems = _allItems.ToList();
+            }
+            else
+            {
+                _filteredItems = _allItems.Where(t => 
+                    (t.Description?.ToLower() ?? "").Contains(_searchQuery) ||
+                    (t.Amount.ToString().Contains(_searchQuery))).ToList();
+            }
+            _currentPage = 1;
+            ApplyPage();
         }
 
         private void ApplyPage()
         {
-            _totalPages = Math.Max(1, (int)Math.Ceiling(_allItems.Count / (double)PageSize));
+            _totalPages = Math.Max(1, (int)Math.Ceiling(_filteredItems.Count / (double)PageSize));
             _currentPage = Math.Max(1, Math.Min(_currentPage, _totalPages));
 
-            var pageItems = _allItems
+            var pageItems = _filteredItems
                 .Skip((_currentPage - 1) * PageSize)
                 .Take(PageSize)
                 .ToList();
@@ -88,7 +116,7 @@ namespace FastAccountingSoftware.Views
                         dbContext.Transactions.Add(dialog.NewTransaction);
                         dbContext.SaveChanges();
                     }
-                    LoadData();
+                    LoadDataAsync();
                 }
                 catch (Exception ex)
                 {
@@ -103,7 +131,7 @@ namespace FastAccountingSoftware.Views
             {
                 var win = new TransactionDetailWindow(t) { Owner = Window.GetWindow(this) };
                 win.ShowDialog();
-                LoadData();
+                LoadDataAsync();
             }
         }
 
