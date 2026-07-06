@@ -7,5 +7,6 @@ namespace FastAccountingSoftware
     {
         public static MainWindow CurrentWindow => (MainWindow)Current.MainWindow;
         public static FastAccountingSoftware.Models.User? CurrentUser { get; set; }
+        public static bool IsTrial { get; set; } = false;
     }
 }

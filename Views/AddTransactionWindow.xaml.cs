@@ -23,11 +23,8 @@ namespace FastAccountingSoftware.Views
             {
                 using (var db = new AppDbContext())
                 {
-                    var profile = db.CompanyProfiles.FirstOrDefault();
-                    bool isPremium = profile?.IsPremium ?? true;
-
                     int count = db.Transactions.Count(t => t.Type == _type);
-                    if (!isPremium && count >= 3)
+                    if (App.IsTrial && count >= 3)
                     {
                         string typeStr = _type == TransactionType.Income ? "income" : "expense";
                         CustomMessageBox.Show($"Trial Version Limit: You can only record up to 3 {typeStr} entries. Please upgrade to the premium version to add more.", "Trial Limitation", MessageBoxButton.OK, MessageBoxImage.Warning);
