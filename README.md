@@ -114,21 +114,57 @@ After loading demo data, these sample staff logins will be available:
 
 <div align="center">
 
-### Login Page
-![Login Page](Screenshots/01_login.png)
-*Dual-role login — Admin & Staff with secure authentication. Press Enter or click Sign In.*
+### Splash Screen
+![Splash Screen](Screenshots/01_splash.png)
+*Interactive custom loading screen with database checks.*
 
-### Dashboard
-![Dashboard](Screenshots/02_dashboard.png)
-*Real-time financial overview with KPI cards, cash flow charts, AI assistant, and customer birthday reminders*
+### Login Page (Dual-Role)
+![Login Page](Screenshots/02_login.png)
+*Admin & Staff login toggle. Log in securely with admin credentials.*
 
-### Cash Flow Chart
-![Cash Flow](Screenshots/03_cashflow_chart.png)
-*6-month income vs. expenses with live data from your transactions*
+### Dashboard Page
+![Dashboard Page](Screenshots/03_dashboard.png)
+*Real-time metrics, cash-flow summary, AI assistant, and customer birthday reminders.*
 
-### Settings & Preferences
-![Settings](Screenshots/05_settings.png)
-*Company profile, financial preferences, HMO providers, demo data management*
+### Customer Management
+![Customer Page](Screenshots/04_customers.png)
+*Manage customer profiles, view balances, send direct wishes, and paginate through records.*
+
+### Inventory Catalogue
+![Inventory Page](Screenshots/05_inventory.png)
+*Track stock levels, cost/selling prices, markups, and reorder levels with auto-expense on restocking.*
+
+### Staff Page
+![Staff Page](Screenshots/06_staffs.png)
+*Onboard team members, auto-generate login credentials, and manage department structures.*
+
+### Payroll runs
+![Payroll Page](Screenshots/07_payroll.png)
+*Process monthly salaries, calculate statutory deductions (tax, pension, HMO premiums) with one-click.*
+
+### Invoice Generator
+![Invoice Page](Screenshots/08_invoices.png)
+*Issue professional invoices, track payment status (Paid, Unpaid, Overdue) and export to PDF.*
+
+### Income Tracker
+![Income Page](Screenshots/09_income.png)
+*View and filter income items, view detailed row popups, and search transactions.*
+
+### Expenses Page
+![Expenses Page](Screenshots/10_expenses.png)
+*Monitor outgoing funds, log overheads, and see auto-logged product purchase expenses.*
+
+### Profile Setup
+![Profile Page](Screenshots/11_profile_settings.png)
+*Set company name, business email, address, tax rate (%), and select localized default currency.*
+
+### Application Settings
+![Settings Page](Screenshots/12_settings.png)
+*Manage administrative settings, update credentials, change HMO plans, and load sample demo data.*
+
+### Financial Reports
+![Reports Page](Screenshots/13_reports.png)
+*Generate Profit & Loss statements, Balance Sheets, and Tax Summary reports with instant PDF/Excel/Word/Email export options.*
 
 </div>
 
