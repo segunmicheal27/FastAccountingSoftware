@@ -19,11 +19,12 @@ A modern, full-featured desktop accounting system built with WPF (.NET 8) for Ni
 
 ## ⬇️ Download & Install
 
-> **[👉 Click here to download the latest release (.exe)](https://github.com/segunmicheal27/FastAccountingSoftware/releases/latest)**
+> **[👉 Click here to download the latest release (.zip)](https://github.com/segunmicheal27/FastAccountingSoftware/releases/latest)**
 
-1. Download **`FastAccountingSoftware-v1.0.0-Setup.exe`** from the Releases page
-2. Double-click the file to launch — **no installation wizard needed**
-3. The app opens immediately and runs fully portable from any folder
+1. Download **`FastAccountingSoftware-v1.0.0-Portable.zip`** from the Releases page
+2. Right-click the `.zip` file and select **Extract All...**
+3. Open the extracted folder and double-click **`FastAccountingSoftware.exe`** to launch the app.
+4. The app runs fully portable — no installation wizard is needed.
 
 > ⚠️ **Windows SmartScreen may appear** — click **"More info"** then **"Run anyway"**. The app is safe.
 
