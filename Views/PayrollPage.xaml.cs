@@ -96,8 +96,11 @@ namespace FastAccountingSoftware.Views
             {
                 using (var dbContext = new AppDbContext())
                 {
+                    var profile = dbContext.CompanyProfiles.FirstOrDefault();
+                    bool isPremium = profile?.IsPremium ?? true;
+
                     int completedRuns = dbContext.PayrollRuns.Count(r => r.Status == PayrollStatus.Completed);
-                    if (completedRuns >= 1)
+                    if (!isPremium && completedRuns >= 1)
                     {
                         CustomMessageBox.Show("Trial Version Limit: You can only run 1 payroll cycle. Please upgrade to the premium version to unlock unlimited cycles.", "Trial Limitation", MessageBoxButton.OK, MessageBoxImage.Warning);
                         return;

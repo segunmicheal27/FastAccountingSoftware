@@ -102,7 +102,10 @@ namespace FastAccountingSoftware.Views
                 {
                     using (var db = new AppDbContext())
                     {
-                        if (db.Staff.Count() >= 3)
+                        var profile = db.CompanyProfiles.FirstOrDefault();
+                        bool isPremium = profile?.IsPremium ?? true;
+
+                        if (!isPremium && db.Staff.Count() >= 3)
                         {
                             CustomMessageBox.Show("Trial Version Limit: You can only register up to 3 staff members. Please upgrade to the premium version to add more.", "Trial Limitation", MessageBoxButton.OK, MessageBoxImage.Warning);
                             return;

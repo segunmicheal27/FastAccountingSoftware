@@ -68,6 +68,36 @@ namespace FastAccountingSoftware.Views
                 NavStaff.Visibility = Visibility.Collapsed;
             }
 
+            // Apply Company Module Configuration overrides
+            try
+            {
+                using (var db = new AppDbContext())
+                {
+                    var profile = db.CompanyProfiles.FirstOrDefault();
+                    if (profile != null)
+                    {
+                        if (profile.DisableCms)
+                        {
+                            NavCustomers.Visibility = Visibility.Collapsed;
+                        }
+                        else
+                        {
+                            NavCustomers.Visibility = _currentUser.Role == UserRole.Admin ? Visibility.Visible : Visibility.Visible;
+                        }
+
+                        if (profile.DisablePos)
+                        {
+                            NavInvoices.Visibility = Visibility.Collapsed;
+                        }
+                        else
+                        {
+                            NavInvoices.Visibility = Visibility.Visible;
+                        }
+                    }
+                }
+            }
+            catch { }
+
             // Default to Dashboard
             NavDashboard.IsChecked = true;
         }

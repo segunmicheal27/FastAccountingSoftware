@@ -94,7 +94,10 @@ namespace FastAccountingSoftware.Views
                 {
                     using (var db = new AppDbContext())
                     {
-                        if (db.Customers.Count() >= 5)
+                        var profile = db.CompanyProfiles.FirstOrDefault();
+                        bool isPremium = profile?.IsPremium ?? true; // Default to true / premium
+
+                        if (!isPremium && db.Customers.Count() >= 5)
                         {
                             CustomMessageBox.Show("Trial Version Limit: You can only register up to 5 customers. Please upgrade to the premium version to add more.", "Trial Limitation", MessageBoxButton.OK, MessageBoxImage.Warning);
                             return;

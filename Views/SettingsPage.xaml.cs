@@ -26,6 +26,8 @@ namespace FastAccountingSoftware.Views
                     if (profile != null)
                     {
                         BirthdayTemplateBox.Text = profile.BirthdayTemplate;
+                        DisableCmsCheck.IsChecked = profile.DisableCms;
+                        DisablePosCheck.IsChecked = profile.DisablePos;
                     }
                 }
             }
@@ -371,6 +373,18 @@ namespace FastAccountingSoftware.Views
                         dbContext.Users.Add(new User { Username = "admin", PasswordHash = "admin", Role = UserRole.Admin });
                         dbContext.SaveChanges();
                     }
+
+                    // Re-add default company profile
+                    if (!dbContext.CompanyProfiles.Any())
+                    {
+                        dbContext.CompanyProfiles.Add(new CompanyProfile
+                        {
+                            Name = "LedgerFlow Tech",
+                            Email = "finance@ledgerflow.com",
+                            Address = "100 Commercial Avenue, Lagos, Nigeria"
+                        });
+                        dbContext.SaveChanges();
+                    }
                 }
 
                 StatusMessage.Text = "Database completely wiped! All stats are back to ₦0 / 0 active staff.";
@@ -430,14 +444,34 @@ namespace FastAccountingSoftware.Views
         {
             string currency = (CurrencyCombo.SelectedItem as ComboBoxItem)?.Content.ToString() ?? "₦";
             string taxRate = TaxRateBox.Text;
-            string startMonth = (FiscalStartCombo.SelectedItem as ComboBoxItem)?.Content.ToString() ?? "January";
+            bool disableCms = DisableCmsCheck.IsChecked ?? false;
+            bool disablePos = DisablePosCheck.IsChecked ?? false;
 
-            CustomMessageBox.Show(
-                $"Financial Preferences Saved!\n\nCurrency symbol: {currency}\nTax Rate: {taxRate}%\nFiscal calendar start: {startMonth}",
-                "Settings Saved",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information
-            );
+            try
+            {
+                using (var dbContext = new AppDbContext())
+                {
+                    var profile = dbContext.CompanyProfiles.FirstOrDefault();
+                    if (profile != null)
+                    {
+                        profile.DisableCms = disableCms;
+                        profile.DisablePos = disablePos;
+                        dbContext.CompanyProfiles.Update(profile);
+                        dbContext.SaveChanges();
+                    }
+                }
+
+                CustomMessageBox.Show(
+                    $"Financial Preferences Saved!\n\nCurrency symbol: {currency}\nTax Rate: {taxRate}%\nDisable CMS: {disableCms}\nDisable POS: {disablePos}",
+                    "Settings Saved",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
+            }
+            catch (Exception ex)
+            {
+                CustomMessageBox.Show($"Failed to save preferences: {ex.Message}", "Database Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }
